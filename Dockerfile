@@ -5,7 +5,7 @@ WORKDIR /app
 # Copiar archivos de la app
 COPY proxy.py index.html prototipo-crm.html ./
 
-# Puerto dinamico de Cloud Run
+# Puerto dinámico de Cloud Run
 ENV PORT=8080
 EXPOSE 8080
 

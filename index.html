@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asesor · Maxim Domenech Perú</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f5f4f0; --white:#fff; --surface:#faf9f7;
+  --border:#e2dfd8;
+  --orange:#e85d04; --orange-dk:#c44d03; --orange-lt:#fff0e8;
+  --navy:#1a2540;
+  --text:#1a2540; --text2:#4a5568; --text3:#8a95a8;
+  --green:#16a34a; --green-bg:#f0fdf4;
+  --sh:0 2px 16px rgba(26,37,64,.08);
+  --sh-lg:0 8px 40px rgba(26,37,64,.14);
+  --ff:'Outfit',sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;font-family:var(--ff);background:var(--bg);color:var(--text);overflow:hidden}
+.app{display:flex;flex-direction:column;height:100vh}
+
+/* HEADER */
+header{height:52px;display:flex;align-items:center;padding:0 16px;background:var(--navy);gap:12px;flex-shrink:0}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-sq{width:32px;height:32px;background:var(--orange);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo-name{font-size:15px;font-weight:700;color:#fff}.logo-name span{color:var(--orange)}
+.logo-sub{font-size:10px;color:rgba(255,255,255,.45);font-family:var(--mono);margin-top:1px}
+.hpills{display:flex;gap:6px;margin-left:auto}
+.pill{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:3px 9px;font-size:10px;font-family:var(--mono);color:rgba(255,255,255,.55)}
+.pdot{width:5px;height:5px;border-radius:50%;background:#4ade80}
+.pval{color:#fff;font-weight:600}
+
+/* MAIN */
+.main{display:flex;flex:1;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:200px;flex-shrink:0;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.sh{padding:9px 13px;font-size:9px;font-family:var(--mono);color:var(--text3);letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.badge{background:var(--orange);color:#fff;font-size:9px;font-weight:700;font-family:var(--mono);padding:1px 6px;border-radius:10px}
+.eq-scroll{overflow-y:auto;flex:1}
+.eq-scroll::-webkit-scrollbar{width:2px}
+.eq-scroll::-webkit-scrollbar-thumb{background:var(--border)}
+.eq-row{padding:7px 13px;border-bottom:1px solid var(--border);position:relative}
+.eq-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--orange);transform:scaleY(0);transition:.15s}
+.eq-row:hover{background:var(--surface)}.eq-row:hover::before{transform:scaleY(1)}
+.eq-name{font-size:10px;font-weight:600;color:var(--text);margin-bottom:3px}
+.eq-tags{display:flex;gap:3px;flex-wrap:wrap}
+.etag{font-size:9px;font-family:var(--mono);padding:1px 4px;border-radius:3px;background:var(--bg);border:1px solid var(--border);color:var(--text3)}
+.etag.o{color:var(--orange);border-color:rgba(232,93,4,.25);background:var(--orange-lt)}
+.etag.g{color:var(--green);border-color:rgba(22,163,74,.25);background:var(--green-bg)}
+.leads-box{padding:9px 13px}
+.lmini{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 8px;font-size:10px;margin-bottom:4px}
+.lm-name{font-weight:600;color:var(--text)}.lm-co{color:var(--text3);margin-top:1px}
+.lm-eq{color:var(--orange);font-family:var(--mono);font-size:9px;margin-top:2px}
+.no-leads{font-size:11px;color:var(--text3);text-align:center;padding:8px 0}
+
+/* CHAT WRAP */
+.chat-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* FORM */
+.form-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:16px;background:var(--bg);overflow-y:auto}
+.form-card{background:var(--white);border-radius:14px;width:100%;max-width:440px;box-shadow:var(--sh-lg);overflow:hidden}
+.fc-head{background:var(--navy);padding:18px 22px;text-align:center}
+.fc-head .ico{font-size:26px;margin-bottom:6px}
+.fc-head h2{font-size:16px;font-weight:700;color:#fff;margin-bottom:2px}
+.fc-head p{font-size:11px;color:rgba(255,255,255,.5)}
+.fc-body{padding:16px 20px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fg{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+label{font-size:11px;font-weight:600;color:var(--text)}
+label .r{color:var(--orange)}
+.fi{background:var(--surface);border:1.5px solid var(--border);border-radius:7px;padding:8px 11px;font-family:var(--ff);font-size:13px;color:var(--text);outline:none;transition:border-color .15s;width:100%}
+.fi:focus{border-color:var(--orange)}.fi::placeholder{color:var(--text3)}
+.btn-go{width:100%;padding:11px;border-radius:9px;border:none;background:var(--orange);color:#fff;font-family:var(--ff);font-size:14px;font-weight:700;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:4px}
+.btn-go:hover{background:var(--orange-dk)}
+.priv{font-size:10px;color:var(--text3);text-align:center;margin-top:8px;line-height:1.5}
+.priv a{color:var(--orange);text-decoration:none}
+
+/* CHAT VIEW */
+.chat-view{flex:1;display:none;flex-direction:column;overflow:hidden}
+.chat-topbar{padding:9px 14px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.upill{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:5px 10px}
+.uav{width:24px;height:24px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:700;flex-shrink:0}
+.uname{font-weight:600;color:var(--text);font-size:12px}.uco{color:var(--text3);font-size:10px}
+.btn-restart{margin-left:auto;font-size:10px;font-family:var(--mono);color:var(--text3);background:none;border:1px solid var(--border);border-radius:5px;padding:4px 9px;cursor:pointer;transition:all .12s}
+.btn-restart:hover{border-color:var(--orange);color:var(--orange)}
+
+.messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.messages::-webkit-scrollbar{width:3px}
+.messages::-webkit-scrollbar-thumb{background:var(--border)}
+.msg{display:flex;gap:8px;max-width:700px;animation:fu .2s ease}
+@keyframes fu{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.msg.bot{align-self:flex-start}.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.mav{width:26px;height:26px;border-radius:7px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:13px}
+.msg.bot .mav{background:var(--orange);color:#fff}
+.msg.user .mav{background:var(--navy);color:#fff;font-weight:700;font-size:11px}
+.bubble{padding:9px 13px;border-radius:10px;font-size:13px;line-height:1.65;max-width:540px}
+.msg.bot .bubble{background:var(--white);border:1px solid var(--border);box-shadow:var(--sh)}
+.msg.user .bubble{background:var(--navy);color:#dce8ff}
+.bubble strong{color:var(--orange)}.bubble ul{margin:6px 0 3px 16px}.bubble li{margin-bottom:2px}
+.typing{display:flex;gap:4px;align-items:center;padding:9px 13px}
+.typing span{width:6px;height:6px;background:var(--orange);border-radius:50%;animation:td 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+@keyframes td{0%,80%,100%{transform:scale(.6);opacity:.3}40%{transform:scale(1);opacity:1}}
+
+/* REC CARD */
+.rec-card{margin-top:10px;border-radius:10px;overflow:hidden;border:2px solid var(--orange);background:var(--white);box-shadow:0 4px 20px rgba(232,93,4,.12)}
+.rec-hd{background:linear-gradient(135deg,var(--orange),var(--orange-dk));padding:11px 14px;display:flex;align-items:flex-start;justify-content:space-between}
+.rec-bdg{background:rgba(255,255,255,.2);color:#fff;font-family:var(--mono);font-size:8px;letter-spacing:2px;padding:2px 6px;border-radius:3px;flex-shrink:0;margin-top:2px}
+.rec-nm{font-size:14px;font-weight:800;color:#fff;line-height:1.1}
+.rec-sb{font-size:9px;color:rgba(255,255,255,.7);margin-top:2px}
+.rec-body{padding:11px 14px}
+.rec-specs{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:10px}
+.rspec{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 8px}
+.rsl{font-size:8px;font-family:var(--mono);color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:1px}
+.rsv{font-size:11px;font-weight:600;color:var(--text)}
+.rec-why{font-size:12px;color:var(--text2);line-height:1.6;padding:9px 13px;background:var(--orange-lt);border-top:1px solid rgba(232,93,4,.15)}
+.rec-why strong{color:var(--navy)}
+.rec-ft{padding:9px 13px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.rec-links{display:flex;gap:10px;font-size:11px;font-family:var(--mono)}
+.rec-links a{color:var(--orange);text-decoration:none}.rec-links a:hover{text-decoration:underline}
+.rec-cta{background:var(--orange);color:#fff;border:none;border-radius:6px;font-family:var(--ff);font-size:11px;font-weight:700;padding:7px 13px;cursor:pointer;transition:background .12s}
+.rec-cta:hover{background:var(--orange-dk)}
+
+/* QUOTE FORM (inline in chat after recommendation) */
+.quote-form{margin-top:12px;border-radius:10px;overflow:hidden;border:2px solid var(--green);background:var(--white);box-shadow:0 4px 20px rgba(22,163,74,.10)}
+.qf-head{background:var(--green);padding:11px 14px;text-align:center}
+.qf-head h3{font-size:14px;font-weight:700;color:#fff;margin:0}
+.qf-head p{font-size:10px;color:rgba(255,255,255,.7);margin-top:2px}
+.qf-body{padding:14px 16px}
+.qf-body .fg{margin-bottom:10px}
+.qf-body label{font-size:11px;font-weight:600;color:var(--text)}
+.qf-body label .r{color:var(--orange)}
+.qf-body .fi{background:var(--surface);border:1.5px solid var(--border);border-radius:7px;padding:8px 11px;font-family:var(--ff);font-size:13px;color:var(--text);outline:none;width:100%;transition:border-color .15s}
+.qf-body .fi:focus{border-color:var(--green)}
+.qf-body .fi::placeholder{color:var(--text3)}
+.qf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-quote{width:100%;padding:11px;border-radius:9px;border:none;background:var(--green);color:#fff;font-family:var(--ff);font-size:14px;font-weight:700;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:4px}
+.btn-quote:hover{background:#15803d}
+.qf-ok{padding:14px 16px;text-align:center}
+.qf-ok .check{font-size:28px;margin-bottom:6px}
+.qf-ok p{font-size:12px;color:var(--text2);line-height:1.5}
+.qf-ok strong{color:var(--green)}
+
+/* INPUT */
+.input-zone{padding:10px 14px;background:var(--white);border-top:1px solid var(--border);display:flex;flex-direction:column;gap:7px}
+.qrs{display:flex;gap:5px;flex-wrap:wrap}
+.qr{font-size:11px;padding:5px 10px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;transition:all .12s;font-family:var(--ff)}
+.qr:hover{border-color:var(--orange);color:var(--orange);background:var(--orange-lt)}
+.irow{display:flex;gap:8px;align-items:flex-end}
+.ci{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-family:var(--ff);font-size:13px;color:var(--text);outline:none;resize:none;max-height:90px;line-height:1.5;transition:border-color .15s}
+.ci:focus{border-color:var(--orange)}.ci::placeholder{color:var(--text3)}
+.sbtn{width:38px;height:38px;border-radius:8px;border:none;flex-shrink:0;background:var(--orange);color:#fff;font-size:15px;cursor:pointer;transition:background .12s;display:flex;align-items:center;justify-content:center}
+.sbtn:hover{background:var(--orange-dk)}.sbtn:disabled{background:var(--border);color:var(--text3);cursor:not-allowed}
+
+/* ERROR BANNER */
+.err-banner{background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px 14px;font-size:12px;color:#dc2626;margin:10px;display:none}
+.err-banner.show{display:block}
+
+/* TOAST */
+.toast{position:fixed;bottom:14px;right:14px;z-index:999;background:var(--navy);color:#fff;border-radius:9px;padding:9px 14px;font-size:12px;display:flex;align-items:center;gap:8px;box-shadow:var(--sh-lg);transition:all .3s;transform:translateY(70px);opacity:0}
+.toast.show{transform:none;opacity:1}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header>
+  <div class="logo">
+    <div class="logo-sq">🚡</div>
+    <div>
+      <div class="logo-name">Maxim <span>Domenech</span></div>
+      <div class="logo-sub">Asesor de plataformas · Lima, Perú</div>
+    </div>
+  </div>
+  <div class="hpills">
+    <div class="pill"><span class="pdot"></span><span class="pval">18</span>&nbsp;equipos</div>
+    <div class="pill"><span class="pdot" style="background:#fb923c"></span><span class="pval" id="p-ld">0</span>&nbsp;leads</div>
+  </div>
+</header>
+
+<div class="main">
+  <aside class="sidebar">
+    <div class="sh">Catálogo <span class="badge">18</span></div>
+    <div class="eq-scroll" id="eq-list"></div>
+    <div class="sh">Leads <span class="badge" id="ld-badge" style="background:var(--navy)">0</span></div>
+    <div class="leads-box"><div id="leads-list"><div class="no-leads">Sin leads aún</div></div></div>
+  </aside>
+
+  <div class="chat-wrap">
+
+    <!-- FORMULARIO -->
+    <div class="form-wrap" id="form-wrap">
+      <div class="form-card">
+        <div class="fc-head">
+          <div class="ico">🚡</div>
+          <h2>Asesor de Plataformas Elevadoras</h2>
+          <p>Cuéntanos tu proyecto y te recomendamos el equipo ideal</p>
+        </div>
+        <div class="fc-body">
+          <div class="frow">
+            <div class="fg"><label>Nombre <span class="r">*</span></label><input class="fi" id="fn" placeholder="Tu nombre" onkeydown="enterForm(event)"></div>
+            <div class="fg"><label>Apellidos <span class="r">*</span></label><input class="fi" id="fa" placeholder="Apellidos" onkeydown="enterForm(event)"></div>
+          </div>
+          <div class="frow">
+            <div class="fg"><label>Empresa <span class="r">*</span></label><input class="fi" id="fe" placeholder="Tu empresa" onkeydown="enterForm(event)"></div>
+            <div class="fg"><label>Sector</label>
+              <select class="fi" id="fs">
+                <option value="">Selecciona...</option>
+                <option>Construcción</option><option>Mantenimiento industrial</option>
+                <option>Retail / Logística</option><option>Minería y energía</option>
+                <option>Eventos</option><option>Telecomunicaciones</option><option>Otro</option>
+              </select>
+            </div>
+          </div>
+          <div class="frow">
+            <div class="fg"><label>Teléfono <span class="r">*</span></label><input class="fi" id="ft" type="tel" placeholder="+51 9XX XXX XXX" onkeydown="enterForm(event)"></div>
+            <div class="fg"><label>Email</label><input class="fi" id="fmail" type="email" placeholder="tu@empresa.com" onkeydown="enterForm(event)"></div>
+          </div>
+          <div class="fg"><label>Ciudad de la obra <span class="r">*</span></label>
+              <select class="fi" id="fz" onchange="toggleOtraCiudad('fz','fz-otra')">
+                <option value="">Selecciona ciudad...</option>
+                <option>Lima</option><option>Callao</option>
+                <option>Arequipa</option><option>Chiclayo</option><option>Chimbote</option>
+                <option>Cusco</option><option>Huancayo</option><option>Ica</option>
+                <option>Iquitos</option><option>Piura</option><option>Pucallpa</option>
+                <option>Tacna</option><option>Trujillo</option><option value="Otra">Otra</option>
+              </select>
+              <input class="fi" id="fz-otra" placeholder="Escribe la ciudad..." style="display:none;margin-top:6px" onkeydown="enterForm(event)">
+            </div>
+          <button class="btn-go" onclick="startChat()">🚀 Iniciar asesoramiento personalizado</button>
+          <p class="priv">Datos usados solo para tu presupuesto · <a href="https://maximdomenech.pe/politica-de-privacidad/" target="_blank">Política de privacidad</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="chat-view" id="chat-view">
+      <div class="chat-topbar">
+        <div class="upill">
+          <div class="uav" id="u-av">?</div>
+          <div><div class="uname" id="u-name">—</div><div class="uco" id="u-co">—</div></div>
+        </div>
+        <button class="btn-restart" onclick="doRestart()">↩ Nueva consulta</button>
+      </div>
+      <div class="err-banner" id="err-banner"></div>
+      <div class="messages" id="msgs"></div>
+      <div class="input-zone">
+        <div class="qrs" id="qrs"></div>
+        <div class="irow">
+          <textarea class="ci" id="ci" rows="1"
+            placeholder="Describe tu proyecto o responde al asesor..."
+            onkeydown="hk(event)" oninput="ar(this)"></textarea>
+          <button class="sbtn" id="sbtn" onclick="send()">➤</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+<div class="toast" id="toast"><span id="tmsg">✅</span></div>
+
+<script>
+// ── CATÁLOGO REAL MAXIMDOMENECH.PE ──────────────────────────────
+const CAT = [
+  {id:1,  name:"Plataforma Articulada 12m Eléctrica", type:"Manlift Articulado", motor:"Eléctrico", uso:"Interior y Exterior", altura:"12 m", usos:["interiores","espacios reducidos","sin emisiones","naves industriales","retail"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/manlift/plataforma-articulada-12m-electrica/"},
+  {id:2,  name:"Plataforma Articulada 15m Eléctrica", type:"Manlift Articulado", motor:"Eléctrico", uso:"Interior y Exterior", altura:"15 m", usos:["interiores altos","supermercados","logística","naves","silencioso"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/manlift/plataforma-articulada-15m-electrica/"},
+  {id:3,  name:"Plataforma Articulada 16m Eléctrica", type:"Manlift Articulado", motor:"Eléctrico", uso:"Interior y Exterior", altura:"16 m", usos:["instalaciones eléctricas","pintura en altura","mantenimiento"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/manlift/alquiler-de-plataforma-articulada-16m-electrica/"},
+  {id:4,  name:"Plataforma Articulada 18m Eléctrica", type:"Manlift Articulado", motor:"Eléctrico", uso:"Interior y Exterior", altura:"18 m", usos:["alturas medianas-altas","interiores amplios","instalaciones"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/manlift/plataforma-articulada-18m-electrica/"},
+  {id:5,  name:"Plataforma Articulada 12m Diésel",    type:"Manlift Articulado", motor:"Diésel",    uso:"Exterior", altura:"12 m", usos:["exteriores","terrenos irregulares","construcción","todo terreno"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/manlift/plataforma-articulada-12m-diesel/"},
+  {id:6,  name:"Plataforma Articulada 16m Diésel",    type:"Manlift Articulado", motor:"Diésel",    uso:"Exterior", altura:"16 m", usos:["exteriores","obras civiles","techados","terrenos difíciles"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/manlift/plataforma-articulada-16m-diesel/"},
+  {id:7,  name:"Plataforma Articulada 20m Diésel",    type:"Manlift Articulado", motor:"Diésel",    uso:"Exterior", altura:"20 m", usos:["obras altas","fachadas","plantas industriales","aeropuertos"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/manlift/plataforma-articulada-20m-diesel/"},
+  {id:8,  name:"Plataforma Articulada 22m Diésel",    type:"Manlift Articulado", motor:"Diésel",    uso:"Exterior", altura:"22 m", usos:["grandes alturas","obras industriales","todo terreno"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/manlift/alquiler-de-plataforma-articulada-22m-diesel/"},
+  {id:9,  name:"Plataforma Articulada 26m Diésel",    type:"Manlift Articulado", motor:"Diésel",    uso:"Exterior", altura:"26 m", usos:["grandes alturas","obras de gran envergadura","mantenimiento industrial"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/manlift/alquiler-de-plataforma-articulada-26m-diesel/"},
+  {id:10, name:"Plataforma Tijera 6m Eléctrica",      type:"Scissor Lift", motor:"Eléctrico", uso:"Interior y Exterior", altura:"6 m",  carga:"450 kg", usos:["interiores","superficies planas","retail","almacenes","primera altura"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/plataforma-tijera/alquiler-de-plataforma-tijera-6m-electrica/"},
+  {id:11, name:"Plataforma Tijera 8m Eléctrica",      type:"Scissor Lift", motor:"Eléctrico", uso:"Interior y Exterior", altura:"8 m",  carga:"450 kg", usos:["interiores","naves industriales","instalaciones"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/plataforma-tijera/plataforma-tijera-8m-electrica/"},
+  {id:12, name:"Plataforma Tijera 10m Eléctrica",     type:"Scissor Lift", motor:"Eléctrico", uso:"Interior y Exterior", altura:"10 m", carga:"450 kg", usos:["interiores altos","almacenes logísticos","instalaciones MEP"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/plataforma-tijera/plataforma-tijera-10m-electrica/"},
+  {id:13, name:"Plataforma Tijera 12m Eléctrica",     type:"Scissor Lift", motor:"Eléctrico", uso:"Interior y Exterior", altura:"12 m", carga:"450 kg", usos:["interiores","logística","supermercados","hospitales","aeropuertos"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/plataforma-tijera/plataforma-tijera-12m-electrica/"},
+  {id:14, name:"Plataforma Tijera 14m Eléctrica",     type:"Scissor Lift", motor:"Eléctrico", uso:"Interior y Exterior", altura:"14 m", carga:"450 kg", usos:["interiores altos","fachadas ligeras","pintura","instalaciones eléctricas"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/plataforma-tijera/plataforma-tijera-14m-electrica/"},
+  {id:15, name:"Plataforma Tijera 16m Eléctrica",     type:"Scissor Lift", motor:"Eléctrico", uso:"Interior y Exterior", altura:"16 m", carga:"450 kg", usos:["alturas medias-altas","interiores de gran altura","plantas industriales"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/plataforma-tijera/plataforma-tijera-electrica-16-m/"},
+  {id:16, name:"Plataforma Tijera 12m Diésel",        type:"Scissor Lift", motor:"Diésel", uso:"Exterior", altura:"12 m", carga:"700 kg", extra:"Estabilizadores · 35cm libre al suelo", usos:["exteriores","terrenos irregulares","alta carga","todo terreno"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/plataforma-tijera/plataforma-tijera-12m-diesel/"},
+  {id:17, name:"Plataforma Tijera 15m Diésel",        type:"Scissor Lift", motor:"Diésel", uso:"Exterior", altura:"15 m", carga:"700 kg", extra:"Todo terreno · Estabilizadores", usos:["exteriores","obras de construcción","grandes superficies al aire libre"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/plataforma-tijera/plataforma-tijera-15m-diesel/"},
+  {id:18, name:"Plataforma Tijera 18m Diésel",        type:"Scissor Lift", motor:"Diésel", uso:"Exterior", altura:"18 m", carga:"700 kg", extra:"35cm libre al suelo · Máxima estabilidad", usos:["máxima altura scissor","grandes exteriores","obras industriales","aeropuerto Jorge Chávez"], url:"https://maximdomenech.pe/alquiler-maquinaria-lima/plataforma-tijera/plataforma-tijera-18m-diesel/"},
+];
+
+// ── ESTADO ───────────────────────────────────────────────────────
+let leads = [], history = [], lead = null, busy = false;
+
+// ── SIDEBAR ──────────────────────────────────────────────────────
+(function(){
+  const l = document.getElementById('eq-list');
+  ['Manlift Articulado','Scissor Lift'].forEach(t => {
+    CAT.filter(e => e.type === t).forEach(e => {
+      l.innerHTML += `<div class="eq-row">
+        <div class="eq-name">${e.name}</div>
+        <div class="eq-tags">
+          <span class="etag o">${e.altura}</span>
+          <span class="etag">${e.motor}</span>
+          <span class="etag g">${e.uso.includes('Interior')?'Int+Ext':'Ext'}</span>
+        </div></div>`;
+    });
+  });
+})();
+
+// ── FORMULARIO ───────────────────────────────────────────────────
+function enterForm(e){ if(e.key==='Enter') startChat(); }
+
+function toggleOtraCiudad(selectId, inputId){
+  const sel=document.getElementById(selectId);
+  const inp=document.getElementById(inputId);
+  if(sel.value==='Otra'){inp.style.display='block';inp.focus();}
+  else{inp.style.display='none';inp.value='';}
+}
+
+function getCiudadValue(selectId, inputId){
+  const sel=document.getElementById(selectId).value;
+  if(sel==='Otra') return document.getElementById(inputId).value.trim();
+  return sel;
+}
+
+function startChat() {
+  const fn=document.getElementById('fn').value.trim();
+  const fa=document.getElementById('fa').value.trim();
+  const fe=document.getElementById('fe').value.trim();
+  const ft=document.getElementById('ft').value.trim();
+  const fz=getCiudadValue('fz','fz-otra');
+  if(!fn||!fa||!fe||!ft||!fz){toast('⚠️ Completa los campos obligatorios');return;}
+  const telClean=ft.replace(/[\s\-\(\)]/g,'');
+  if(!/^\+?\d{7,15}$/.test(telClean)){toast('⚠️ Teléfono inválido. Usa solo números (ej: +51 9XX XXX XXX)');return;}
+
+  lead={nombre:fn,apellido:fa,empresa:fe,
+    sector:document.getElementById('fs').value,
+    tel:ft,email:document.getElementById('fmail').value.trim(),
+    ciudad:fz,rec:null};
+  leads.push(lead);
+  document.getElementById('p-ld').textContent=leads.length;
+  document.getElementById('ld-badge').textContent=leads.length;
+  renderLeads();
+
+  document.getElementById('u-av').textContent=fn[0].toUpperCase();
+  document.getElementById('u-name').textContent=`${fn} ${fa}`;
+  document.getElementById('u-co').textContent=fe+(lead.sector?` · ${lead.sector}`:'');
+
+  document.getElementById('form-wrap').style.display='none';
+  const cv=document.getElementById('chat-view');
+  cv.style.display='flex';
+  history=[];
+
+  botMsg(`¡Hola, <strong>${fn}</strong>! 👋 Soy el asesor de plataformas elevadoras de <strong>Maxim Domenech Perú</strong>.<br><br>
+Contamos con <strong>18 equipos</strong> — manlifts articulados y scissor lifts, eléctricos y diésel, de <strong>6 a 26 metros</strong> — para tu proyecto${fe?` en <em>${fe}</em>`:''}.<br><br>
+Para recomendarte el equipo perfecto necesito entender bien tu obra.<br><br>
+<strong>¿A qué altura aproximada necesitas trabajar?</strong>`);
+  setQRs(['Menos de 6 m','Entre 6 y 10 m','Entre 10 y 14 m','Entre 14 y 20 m','Más de 20 m','Aún no lo sé']);
+}
+
+function doRestart(){
+  if(!confirm('¿Iniciar nueva consulta?'))return;
+  document.getElementById('form-wrap').style.display='flex';
+  document.getElementById('chat-view').style.display='none';
+  ['fn','fa','fe','ft','fmail','fz'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fs').value='';
+  document.getElementById('msgs').innerHTML='';
+  document.getElementById('err-banner').classList.remove('show');
+  history=[];lead=null;
+}
+
+function renderLeads(){
+  const l=document.getElementById('leads-list');
+  if(!leads.length){l.innerHTML='<div class="no-leads">Sin leads aún</div>';return;}
+  l.innerHTML=leads.slice().reverse().map(x=>`<div class="lmini">
+    <div class="lm-name">${x.nombre} ${x.apellido}</div>
+    <div class="lm-co">${x.empresa}${x.sector?' · '+x.sector:''}</div>
+    ${x.rec?`<div class="lm-eq">→ ${x.rec}</div>`:''}</div>`).join('');
+}
+
+// ── SYSTEM PROMPT ────────────────────────────────────────────────
+function sysPrompt(){
+  const ct=CAT.map(e=>`• ${e.name} (${e.type}) — Motor:${e.motor} · Altura:${e.altura} · Uso:${e.uso}`+
+    (e.carga?` · Carga:${e.carga}`:'')+` · Usos: ${e.usos.join(', ')}`+(e.extra?` · ${e.extra}`:'')).join('\n');
+  return `Eres el asesor experto de MAXIM DOMENECH PERÚ, empresa de alquiler de plataformas elevadoras en Lima.
+
+CLIENTE:
+- Nombre: ${lead.nombre} ${lead.apellido}
+- Empresa: ${lead.empresa} | Sector: ${lead.sector||'N/E'}
+- Teléfono: ${lead.tel} | Email: ${lead.email||'N/E'}
+- Ciudad obra: ${lead.ciudad||'N/E'}
+
+CATÁLOGO (18 equipos):
+${ct}
+
+SERVICIOS ADICIONALES:
+- NO proporcionamos operador. El cliente debe tener su propio operario.
+- SÍ ofrecemos capacitación al personal del cliente en nuestras instalaciones para que aprendan a operar el equipo de forma segura.
+
+CONTACTO: WhatsApp +51 968 008 099 / +51 999 927 284 · info@maximdomenech.pe
+
+REGLAS CRÍTICAS DE SEGURIDAD Y SELECCIÓN:
+- NUNCA recomiendes equipos DIÉSEL para trabajos en INTERIORES o espacios cerrados. Los diésel emiten gases tóxicos. Para interiores SIEMPRE recomienda eléctricos.
+- SIEMPRE pregunta por las dimensiones de acceso (ancho de puertas, pasillos, rampas) ANTES de recomendar. El ancho de la máquina debe caber por donde tiene que pasar.
+- SIEMPRE pregunta cuántas personas trabajarán simultáneamente en la plataforma y si subirán materiales o herramientas pesadas. Esto determina la capacidad de carga necesaria: las tijera soportan hasta 450-700 kg, los articulados menos (~230 kg). Si son 2+ operarios con material, necesitan una tijera.
+- Si el cliente necesita trabajar en interior Y exterior, prioriza eléctrico (sirve para ambos).
+- EXTERIOR CON TERRENO PLANO: tanto eléctrico como diésel son viables. NO asumas uno u otro. PREGUNTA al cliente su preferencia explicando los factores de decisión:
+  · Eléctrico: silencioso, sin emisiones, menor coste de alquiler, pero necesita recarga (autonomía limitada a unas 8h) y requiere acceso a toma eléctrica cercana.
+  · Diésel: autonomía continua sin depender de conexión eléctrica, ideal para jornadas largas o ubicaciones sin acceso a electricidad, pero genera ruido y emisiones.
+  · Pregunta clave: "¿Tendrá acceso a una toma de corriente cerca de la zona de trabajo? ¿Cuántas horas al día usará el equipo?"
+- EXTERIOR CON TERRENO IRREGULAR: recomienda diésel directamente (tracción 4x4, mayor despeje al suelo).
+- TIJERA vs ARTICULADO — la clave es la UBICACIÓN de la máquina respecto al punto de trabajo:
+  · TIJERA (scissor lift): sube solo en vertical. Ideal cuando la máquina se puede colocar JUSTO DEBAJO del punto de trabajo. Mayor capacidad de carga (450-700 kg), perfecta para varios operarios con material.
+  · ARTICULADO (manlift): tiene brazo articulado con alcance horizontal. NECESARIO cuando la máquina NO puede situarse directamente debajo del punto de trabajo (hay obstáculos, voladizos, estanterías, vigas, fachadas con retranqueo, etc.). Menor capacidad de carga (~230 kg).
+- PREGUNTA CLAVE para decidir: "¿Podrá colocar la máquina justo debajo de donde necesita trabajar, o hay obstáculos que se lo impidan?"
+
+INSTRUCCIONES DE CONVERSACIÓN:
+1. Haz UNA sola pregunta por turno. Sé breve y directo.
+2. NUNCA repitas una pregunta que el cliente ya respondió.
+3. FLUJO OBLIGATORIO — Debes completar TODOS estos pasos EN ORDEN, uno por turno. NO te saltes ninguno. NO hagas la recomendación hasta haber completado TODOS:
+
+   PASO 1 — ALTURA EXACTA
+   Pregunta: "¿A qué altura aproximada necesitas trabajar?"
+   REGLA: Necesitas un número EXACTO. Si el cliente da un rango (ej: "entre 10 y 14m", "unos 10-14m"), NO asumas la máxima. Repregunta: "¿Cuál es la altura máxima exacta a la que necesita llegar?" No avances hasta tener un número concreto.
+
+   PASO 2 — INTERIOR / EXTERIOR
+   Pregunta: "¿El trabajo será en interior, exterior, o ambos?"
+
+   PASO 3 — TIPO DE TERRENO
+   Pregunta: "¿El terreno es plano o irregular? (grava, tierra, desniveles...)"
+
+   PASO 4 — MOTOR (solo si exterior + terreno plano)
+   Si es exterior con terreno plano, PREGUNTA: "¿Tiene acceso a toma de corriente cerca de la zona de trabajo? ¿Cuántas horas al día usará el equipo? Así le recomiendo eléctrico o diésel."
+   Si es interior → eléctrico (no preguntar). Si es exterior irregular → diésel (no preguntar). En estos dos casos SALTA este paso.
+
+   PASO 5 — ACCESOS
+   Pregunta: "¿Por dónde tiene que pasar la máquina para llegar a la zona de trabajo? ¿Cuál es el ancho mínimo de puertas, pasillos o rampas?"
+
+   PASO 6 — TIJERA vs ARTICULADO
+   Pregunta: "¿Podrá colocar la máquina justo debajo de donde necesita trabajar, o hay obstáculos que se lo impidan?"
+
+   PASO 7 — CARGA
+   Pregunta: "¿Cuántas personas trabajarán en la plataforma al mismo tiempo? ¿Subirán materiales o herramientas pesadas?"
+
+   PASO 8 — DURACIÓN
+   Pregunta: "¿Cuánto tiempo necesita el equipo? Puede ser desde días hasta varios meses."
+   REGLA: Espera la respuesta. NO muestres la recomendación en el mismo turno en que haces esta pregunta.
+   Las opciones rápidas [QR] para este paso deben incluir rangos amplios: [QR]1-3 días|1-2 semanas|1 mes|2-3 meses|Más de 3 meses[/QR]
+
+4. RECOMENDAR — Solo cuando tengas respuesta a TODOS los pasos anteriores (o los que apliquen), haz tu recomendación. NUNCA antes.
+   VERIFICACIÓN INTERNA (no la muestres al cliente): antes de recomendar, confirma mentalmente que tienes: ✓ altura exacta ✓ interior/exterior ✓ terreno ✓ motor (si aplica) ✓ accesos ✓ tijera/articulado ✓ carga ✓ duración. Si falta alguno, pregunta antes de recomendar.
+
+5. Recomienda SOLO equipos del catálogo. Formato EXACTO:
+
+[REC]
+NOMBRE: <nombre exacto del catálogo>
+TIPO: <Manlift Articulado | Scissor Lift>
+MOTOR: <Eléctrico | Diésel>
+ALTURA: <altura>
+SPECS: <spec1> | <spec2> | <spec3>
+RAZON: <explicación técnica personalizada, mencionando por qué ese motor y tipo son adecuados para su caso>
+[/REC]
+
+6. Puedes añadir un segundo [REC] como alternativa.
+7. Tras recomendar, indica que debajo aparece un formulario para solicitar la cotización formal. NO pidas dirección, RUC ni razón social por chat — esos datos se recogen automáticamente en el formulario.
+8. Responde SIEMPRE en español. Tono profesional y cercano. Sé conciso.
+9. Termina CADA respuesta con: [QR]opción1|opción2|opción3[/QR]`;
+}
+
+// ── LLAMADA A LA API ─────────────────────────────────────────────
+async function callClaude(userMsg) {
+  // System prompt separado (formato correcto de la API de Anthropic)
+  const sys = sysPrompt();
+
+  // Construir mensajes alternados user/assistant + mensaje nuevo
+  const messages = [
+    ...history.map(m => ({ role: m.role, content: m.content })),
+    { role: 'user', content: userMsg }
+  ];
+
+  const response = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system: sys,
+      messages: messages
+    })
+  });
+
+  if (!response.ok) {
+    const err = await response.json().catch(()=>({error:{message:'Error desconocido'}}));
+    throw new Error(err.error?.message || `HTTP ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data.content?.[0]?.text || '';
+}
+
+// ── ENVIAR MENSAJE ───────────────────────────────────────────────
+async function send(){
+  if(busy)return;
+  const ci=document.getElementById('ci');
+  const txt=ci.value.trim();
+  if(!txt)return;
+
+  ci.value='';ci.style.height='auto';
+  setQRs([]);
+  userMsg(txt);
+  document.getElementById('err-banner').classList.remove('show');
+
+  busy=true;
+  document.getElementById('sbtn').disabled=true;
+  showDots();
+
+  try {
+    const reply = await callClaude(txt);
+    history.push({role:'user',content:txt});
+    history.push({role:'assistant',content:reply});
+    hideDots();
+    renderRep(reply);
+  } catch(err) {
+    hideDots();
+    const banner=document.getElementById('err-banner');
+    banner.textContent = `⚠️ ${err.message}`;
+    banner.classList.add('show');
+    console.error('API Error:', err);
+  }
+
+  busy=false;
+  document.getElementById('sbtn').disabled=false;
+}
+
+// ── HELPERS ──────────────────────────────────────────────────────
+function hk(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
+function qs(t){document.getElementById('ci').value=t;send();}
+function ar(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,90)+'px';}
+
+function botMsg(h){
+  const m=document.getElementById('msgs'),el=document.createElement('div');
+  el.className='msg bot';
+  el.innerHTML=`<div class="mav">🚡</div><div class="bubble">${h}</div>`;
+  m.appendChild(el);el.scrollIntoView({behavior:'smooth'});
+}
+function userMsg(t){
+  const m=document.getElementById('msgs'),el=document.createElement('div');
+  el.className='msg user';
+  el.innerHTML=`<div class="mav">${lead?lead.nombre[0].toUpperCase():'?'}</div><div class="bubble">${t}</div>`;
+  m.appendChild(el);el.scrollIntoView({behavior:'smooth'});
+}
+function showDots(){
+  const m=document.getElementById('msgs'),el=document.createElement('div');
+  el.className='msg bot';el.id='dots';
+  el.innerHTML=`<div class="mav">🚡</div><div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+  m.appendChild(el);el.scrollIntoView({behavior:'smooth'});
+}
+function hideDots(){document.getElementById('dots')?.remove();}
+
+function setQRs(opts){
+  document.getElementById('qrs').innerHTML=opts.map(o=>
+    `<button class="qr" onclick="qs('${o.replace(/'/g,"\\'")}')"> ${o}</button>`).join('');
+}
+
+// ── RENDER RESPUESTA ─────────────────────────────────────────────
+function renderRep(txt){
+  let qrs=[];
+  const qm=txt.match(/\[QR\]([\s\S]*?)\[\/QR\]/);
+  if(qm){qrs=qm[1].split('|').map(s=>s.trim()).filter(Boolean);txt=txt.replace(/\[QR\][\s\S]*?\[\/QR\]/,'').trim();}
+
+  const rr=/\[REC\]([\s\S]*?)\[\/REC\]/g;
+  const rm=[...txt.matchAll(rr)];
+  let rh='';
+  for(const m of rm){
+    const b=m[1],g=k=>{const r=b.match(new RegExp(k+': (.+)'));return r?r[1].trim():'';};
+    const nm=g('NOMBRE'),tp=g('TIPO'),mo=g('MOTOR'),al=g('ALTURA'),ra=g('RAZON');
+    const sp=g('SPECS').split('|').map(s=>s.trim()).filter(Boolean);
+    const eq=CAT.find(e=>e.name===nm);
+    if(lead&&!lead.rec){lead.rec=nm;renderLeads();}
+    const waMsg=encodeURIComponent(`Hola, soy ${lead?.nombre||''} ${lead?.apellido||''} de ${lead?.empresa||''}. Me interesa alquilar: ${nm}`);
+    rh+=`<div class="rec-card">
+      <div class="rec-hd"><div><div class="rec-nm">${nm}</div><div class="rec-sb">${tp} · Motor ${mo} · Hasta ${al}</div></div><div class="rec-bdg">RECOMENDADO</div></div>
+      <div class="rec-body">${sp.length?`<div class="rec-specs">${sp.map(s=>`<div class="rspec"><div class="rsl">Especificación</div><div class="rsv">${s}</div></div>`).join('')}</div>`:''}</div>
+      <div class="rec-why"><strong>¿Por qué este equipo?</strong><br>${ra}</div>
+      <div class="rec-ft">
+        <div class="rec-links">
+          <a href="https://wa.me/51968008099?text=${waMsg}" target="_blank">📱 WhatsApp</a>
+          <a href="mailto:info@maximdomenech.pe?subject=Consulta ${encodeURIComponent(nm)}">✉️ Email</a>
+          ${eq?`<a href="${eq.url}" target="_blank">🔗 Ficha</a>`:''}
+        </div>
+      </div></div>`;
+  }
+  txt=txt.replace(rr,'').trim();
+  const f=txt.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>');
+  // Si hay recomendación, añadir formulario de cotización
+  const qf = rm.length ? buildQuoteForm() : '';
+  botMsg((`<p>${f}</p>${rh}${qf}`).replace('<p></p>',''));
+  if(qrs.length)setQRs(qrs);
+}
+
+// ── FORMULARIO DE COTIZACIÓN (post-recomendación) ────────────────
+function buildQuoteForm(){
+  return `<div class="quote-form" id="quote-form">
+    <div class="qf-head">
+      <h3>📋 Datos para tu cotización</h3>
+      <p>Completa estos datos y te enviamos el presupuesto formal</p>
+    </div>
+    <div class="qf-body" id="qf-body">
+      <div class="fg">
+        <label>Dirección exacta de la obra <span class="r">*</span></label>
+        <input class="fi" id="qf-dir" placeholder="Calle, número, referencia" onkeydown="enterQuote(event)">
+      </div>
+      <div class="qf-row">
+        <div class="fg">
+          <label>Ciudad <span class="r">*</span></label>
+          <select class="fi" id="qf-ciudad" onchange="toggleOtraCiudad('qf-ciudad','qf-ciudad-otra')">
+            <option value="">Selecciona...</option>
+            ${['Lima','Callao','Arequipa','Chiclayo','Chimbote','Cusco','Huancayo','Ica','Iquitos','Piura','Pucallpa','Tacna','Trujillo'].map(c=>`<option${c===lead?.ciudad?' selected':''}>${c}</option>`).join('')}
+            <option value="Otra"${'Otra'===lead?.ciudad?' selected':''}>Otra</option>
+          </select>
+          <input class="fi" id="qf-ciudad-otra" placeholder="Escribe la ciudad..." style="display:none;margin-top:6px" onkeydown="enterQuote(event)">
+        </div>
+        <div class="fg">
+          <label>Distrito <span class="r">*</span></label>
+          <input class="fi" id="qf-dist" placeholder="Ej: Miraflores, San Isidro..." onkeydown="enterQuote(event)">
+        </div>
+      </div>
+      <div class="qf-row">
+        <div class="fg">
+          <label>RUC <span class="r">*</span></label>
+          <input class="fi" id="qf-ruc" placeholder="20XXXXXXXXX" maxlength="11" onkeydown="enterQuote(event)">
+        </div>
+        <div class="fg">
+          <label>Razón Social <span class="r">*</span></label>
+          <input class="fi" id="qf-razon" placeholder="Nombre legal de la empresa" onkeydown="enterQuote(event)">
+        </div>
+      </div>
+      <button class="btn-quote" onclick="submitQuote()">📩 Solicitar cotización formal</button>
+    </div>
+  </div>`;
+}
+
+function enterQuote(e){ if(e.key==='Enter') submitQuote(); }
+
+function submitQuote(){
+  const dir=document.getElementById('qf-dir').value.trim();
+  const ciudad=getCiudadValue('qf-ciudad','qf-ciudad-otra');
+  const dist=document.getElementById('qf-dist').value.trim();
+  const ruc=document.getElementById('qf-ruc').value.trim();
+  const razon=document.getElementById('qf-razon').value.trim();
+  if(!dir||!ciudad||!dist||!ruc||!razon){toast('⚠️ Completa todos los campos');return;}
+  if(!/^\d{11}$/.test(ruc)){toast('⚠️ El RUC debe tener 11 dígitos');return;}
+
+  // Guardar en el lead
+  if(lead){
+    lead.dirObra=dir;
+    lead.ciudadObra=ciudad;
+    lead.distObra=dist;
+    lead.ruc=ruc;
+    lead.razonSocial=razon;
+  }
+
+  // Construir resumen de conversación para WhatsApp
+  const resumen = buildConversationSummary();
+  const dirCompleta=`${dir}, ${dist}, ${ciudad}`;
+  const waMsg = `📋 *SOLICITUD DE COTIZACIÓN*
+—
+👤 *Contacto:* ${lead?.nombre||''} ${lead?.apellido||''}
+🏢 *Empresa:* ${razon}
+🔢 *RUC:* ${ruc}
+📞 *Tel:* ${lead?.tel||''}
+📧 *Email:* ${lead?.email||'N/E'}
+—
+🏗️ *Equipo solicitado:* ${lead?.rec||'Por definir'}
+📍 *Obra:* ${dirCompleta}
+—
+📝 *Resumen de necesidades:*
+${resumen}
+—
+Enviado desde el asesor web de Maxim Domenech`;
+
+  // Enviar a webhook (Make → HubSpot)
+  sendToWebhook(lead, dirCompleta, resumen);
+
+  // Reemplazar formulario por confirmación
+  const body=document.getElementById('qf-body');
+  body.innerHTML=`<div class="qf-ok">
+    <div class="check">✅</div>
+    <p><strong>¡Datos recibidos!</strong><br>
+    Dirección: ${dirCompleta}<br>
+    RUC: ${ruc} · ${razon}<br><br>
+    Nuestro equipo te enviará la cotización formal a la brevedad.<br>
+    También puedes contactarnos directamente por <a href="https://wa.me/51968008099?text=${encodeURIComponent(waMsg)}" target="_blank" style="color:var(--green);font-weight:600">WhatsApp</a>.</p>
+  </div>`;
+
+  toast('✅ Cotización solicitada');
+  renderLeads();
+}
+
+// ── RESUMEN DE CONVERSACIÓN ──────────────────────────────────────
+function buildConversationSummary(){
+  // Extraer solo mensajes del usuario para resumir necesidades
+  const userMsgs = history.filter(m => m.role === 'user').map(m => m.content);
+  // Extraer datos clave de las respuestas del bot
+  const botMsgs = history.filter(m => m.role === 'assistant').map(m => m.content);
+
+  let summary = [];
+  const allText = [...userMsgs, ...botMsgs].join(' ').toLowerCase();
+
+  // Detectar datos mencionados
+  userMsgs.forEach(msg => {
+    if(msg.length > 3) summary.push('• ' + msg);
+  });
+
+  // Limitar a lo esencial (máx 500 chars para WhatsApp)
+  let result = summary.join('\n');
+  if(result.length > 500) result = result.substring(0, 497) + '...';
+  return result || 'Sin detalles adicionales';
+}
+
+// ── WEBHOOK (Make/Zapier → HubSpot) ─────────────────────────────
+async function sendToWebhook(leadData, dirCompleta, resumen){
+  try {
+    const payload = {
+      // Contacto
+      nombre: leadData.nombre,
+      apellido: leadData.apellido,
+      email: leadData.email || '',
+      telefono: leadData.tel,
+      // Empresa
+      empresa: leadData.empresa,
+      razon_social: leadData.razonSocial,
+      ruc: leadData.ruc,
+      sector: leadData.sector || '',
+      // Obra
+      equipo_recomendado: leadData.rec || '',
+      direccion_obra: dirCompleta,
+      ciudad_obra: leadData.ciudadObra,
+      distrito_obra: leadData.distObra,
+      // Resumen
+      resumen_conversacion: resumen,
+      fecha: new Date().toISOString()
+    };
+
+    const resp = await fetch('/api/webhook', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if(resp.ok){
+      console.log('✅ Webhook: datos enviados');
+    } else {
+      const err = await resp.text();
+      console.warn('⚠️ Webhook:', err);
+    }
+  } catch(e){
+    console.warn('Webhook no configurado:', e.message);
+  }
+}
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('tmsg').textContent=msg;
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>

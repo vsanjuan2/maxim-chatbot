@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prototipo CRM — TimelinesAI + IA + HubSpot</title>
+<style>
+  :root {
+    --primary: #2E75B6;
+    --primary-light: #D5E8F0;
+    --accent: #E67E22;
+    --success: #27AE60;
+    --danger: #E74C3C;
+    --purple: #8E44AD;
+    --dark: #2C3E50;
+    --gray: #7F8C8D;
+    --light: #F8FAFB;
+    --white: #FFFFFF;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--light); color: var(--dark); }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--primary), #1a4a7a);
+    color: white; padding: 20px 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .header h1 { font-size: 20px; font-weight: 600; }
+  .header .badge { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 12px; font-size: 11px; }
+
+  /* Layout */
+  .app { display: grid; grid-template-columns: 380px 1fr; height: calc(100vh - 64px); }
+
+  /* Left Panel */
+  .panel-left {
+    background: var(--white);
+    border-right: 1px solid #e0e5e8;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .panel-title {
+    padding: 16px 20px; font-size: 14px; font-weight: 700;
+    border-bottom: 1px solid #e0e5e8; color: var(--dark);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  /* Conversation selector */
+  .conv-list { flex: 1; overflow-y: auto; }
+  .conv-item {
+    padding: 14px 20px; border-bottom: 1px solid #f0f2f4;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .conv-item:hover { background: var(--primary-light); }
+  .conv-item.active { background: var(--primary-light); border-left: 3px solid var(--primary); }
+  .conv-item .name { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+  .conv-item .preview { font-size: 12px; color: var(--gray); }
+  .conv-item .tags { margin-top: 6px; display: flex; gap: 4px; flex-wrap: wrap; }
+  .conv-item .tag {
+    font-size: 10px; padding: 2px 7px; border-radius: 4px;
+    font-weight: 600;
+  }
+  .tag-new { background: #D5F5E3; color: #1E8449; }
+  .tag-deal { background: #F5EEF8; color: #8E44AD; }
+  .tag-update { background: #FDE8D0; color: #B35A1F; }
+  .tag-nodeal { background: #FADBD8; color: #C0392B; }
+  .tag-irrelevant { background: #E8E8E8; color: #666; }
+
+  /* Custom conversation input area */
+  .custom-area {
+    border-top: 1px solid #e0e5e8; padding: 12px 16px;
+  }
+  .custom-area textarea {
+    width: 100%; height: 120px; border: 1px solid #d0d5d8;
+    border-radius: 8px; padding: 10px; font-size: 13px;
+    font-family: inherit; resize: vertical;
+  }
+  .custom-area textarea:focus { outline: none; border-color: var(--primary); }
+  .custom-area .hint { font-size: 11px; color: var(--gray); margin-top: 4px; }
+
+  /* Right Panel */
+  .panel-right {
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+
+  /* Chat display */
+  .chat-header {
+    padding: 14px 24px;
+    background: var(--white);
+    border-bottom: 1px solid #e0e5e8;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .chat-header .contact-info { font-weight: 600; font-size: 15px; }
+  .chat-header .phone { font-size: 12px; color: var(--gray); }
+
+  .chat-area {
+    flex: 1; overflow-y: auto; padding: 20px 24px;
+    background: #e5ddd5;
+  }
+  .msg {
+    max-width: 70%; margin-bottom: 8px; padding: 10px 14px;
+    border-radius: 10px; font-size: 14px; line-height: 1.5;
+    position: relative;
+  }
+  .msg.incoming {
+    background: var(--white); border-top-left-radius: 2px;
+    margin-right: auto;
+  }
+  .msg.outgoing {
+    background: #DCF8C6; border-top-right-radius: 2px;
+    margin-left: auto;
+  }
+  .msg .time {
+    font-size: 10px; color: var(--gray); margin-top: 4px;
+    text-align: right;
+  }
+  .msg .sender { font-size: 11px; font-weight: 700; color: var(--primary); margin-bottom: 2px; }
+
+  /* Action bar */
+  .action-bar {
+    padding: 16px 24px; background: var(--white);
+    border-top: 1px solid #e0e5e8;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .btn {
+    padding: 10px 20px; border: none; border-radius: 8px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; display: flex; align-items: center; gap: 8px;
+  }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: #245d94; }
+  .btn-primary:disabled { background: #a0c4e0; cursor: not-allowed; }
+  .btn-outline {
+    background: transparent; color: var(--primary);
+    border: 1.5px solid var(--primary);
+  }
+  .btn-outline:hover { background: var(--primary-light); }
+
+  .status-text { font-size: 13px; color: var(--gray); margin-left: auto; }
+  .status-text.processing { color: var(--accent); }
+  .status-text.done { color: var(--success); }
+  .status-text.error { color: var(--danger); }
+
+  /* Results panel */
+  .results-overlay {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4); z-index: 100;
+    justify-content: center; align-items: center;
+  }
+  .results-overlay.visible { display: flex; }
+  .results-panel {
+    background: var(--white); border-radius: 14px;
+    width: 90%; max-width: 700px; max-height: 85vh;
+    overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+  }
+  .results-header {
+    padding: 20px 24px; border-bottom: 1px solid #e0e5e8;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; background: var(--white); z-index: 1;
+    border-radius: 14px 14px 0 0;
+  }
+  .results-header h2 { font-size: 18px; }
+  .results-close {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: none; background: var(--light); cursor: pointer;
+    font-size: 18px; display: flex; align-items: center; justify-content: center;
+  }
+  .results-body { padding: 24px; }
+
+  /* Result cards */
+  .result-section {
+    margin-bottom: 20px; padding: 16px;
+    border-radius: 10px; background: var(--light);
+    border-left: 4px solid var(--primary);
+  }
+  .result-section.ai { border-left-color: var(--purple); }
+  .result-section.crm { border-left-color: var(--success); }
+  .result-section.no { border-left-color: var(--danger); }
+  .result-section h3 {
+    font-size: 14px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .result-row {
+    display: flex; padding: 4px 0; font-size: 13px;
+  }
+  .result-label { width: 160px; color: var(--gray); flex-shrink: 0; }
+  .result-value { font-weight: 500; }
+  .result-value.yes { color: var(--success); }
+  .result-value.no { color: var(--danger); }
+
+  .result-json {
+    background: #1e1e2e; color: #cdd6f4; border-radius: 8px;
+    padding: 16px; font-family: 'Fira Code', monospace;
+    font-size: 12px; overflow-x: auto; white-space: pre-wrap;
+    margin-top: 12px; max-height: 300px; overflow-y: auto;
+  }
+
+  .spinner {
+    display: inline-block; width: 16px; height: 16px;
+    border: 2px solid #ccc; border-top-color: var(--primary);
+    border-radius: 50%; animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Pipeline visualization */
+  .pipeline {
+    display: flex; align-items: center; gap: 6px;
+    padding: 12px 16px; margin: 12px 0;
+    background: white; border-radius: 8px;
+    overflow-x: auto;
+  }
+  .pipeline-step {
+    padding: 8px 14px; border-radius: 6px;
+    font-size: 12px; font-weight: 600; white-space: nowrap;
+  }
+  .pipeline-step.active { background: var(--success); color: white; }
+  .pipeline-step.inactive { background: #e8e8e8; color: #999; }
+  .pipeline-arrow { color: #ccc; font-size: 16px; }
+
+  @media (max-width: 800px) {
+    .app { grid-template-columns: 1fr; }
+    .panel-left { max-height: 300px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Prototipo CRM: TimelinesAI + IA + HubSpot</h1>
+  <span class="badge">Maxim Domenech Peru</span>
+  <span class="badge">v1.0 Simulacion</span>
+</div>
+
+<div class="app">
+  <!-- LEFT PANEL -->
+  <div class="panel-left">
+    <div class="panel-title">
+      Conversaciones de prueba
+      <span style="font-size: 11px; color: var(--gray); font-weight: 400;" id="conv-count"></span>
+    </div>
+    <div class="conv-list" id="conv-list"></div>
+    <div class="custom-area">
+      <textarea id="custom-conv" placeholder="Pega aqui una conversacion real de WhatsApp para analizarla...&#10;&#10;Formato:&#10;[10:30] Cliente: Hola, necesito una tijera...&#10;[10:32] Comercial: Buenos dias! Claro..."></textarea>
+      <div class="hint">Pega una conversacion real o editada. Haz clic en "Analizar con IA" para procesarla.</div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="panel-right">
+    <div class="chat-header">
+      <div>
+        <div class="contact-info" id="chat-contact">Selecciona una conversacion</div>
+        <div class="phone" id="chat-phone"></div>
+      </div>
+    </div>
+    <div class="chat-area" id="chat-area">
+      <div style="text-align: center; color: #999; margin-top: 40px; font-size: 14px;">
+        Selecciona una conversacion del panel izquierdo o pega una personalizada
+      </div>
+    </div>
+    <div class="action-bar">
+      <button class="btn btn-primary" id="btn-analyze" disabled onclick="analyzeConversation()">
+        Analizar con IA
+      </button>
+      <button class="btn btn-outline" id="btn-json" style="display:none;" onclick="showJSON()">
+        Ver JSON completo
+      </button>
+      <span class="status-text" id="status"></span>
+    </div>
+  </div>
+</div>
+
+<!-- Results overlay -->
+<div class="results-overlay" id="results-overlay" onclick="if(event.target===this)closeResults()">
+  <div class="results-panel">
+    <div class="results-header">
+      <h2 id="results-title">Resultado del analisis</h2>
+      <button class="results-close" onclick="closeResults()">&times;</button>
+    </div>
+    <div class="results-body" id="results-body"></div>
+  </div>
+</div>
+
+<script>
+// ── SAMPLE CONVERSATIONS ──────────────────────────────────────
+const CONVERSATIONS = [
+  {
+    id: 1,
+    name: "Carlos Ramirez — Constructora Vida",
+    phone: "+51 999 888 777",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "Consulta por tijera electrica 12m para obra en San Isidro",
+    messages: [
+      { dir: "incoming", sender: "Carlos", text: "Hola buenas tardes, me pasaron su contacto. Soy Carlos Ramirez de Constructora Vida SAC", time: "14:30" },
+      { dir: "outgoing", sender: "Pedro", text: "Buenas tardes Carlos! Gracias por escribirnos. En que podemos ayudarte?", time: "14:32" },
+      { dir: "incoming", sender: "Carlos", text: "Necesitamos alquilar una plataforma tipo tijera para trabajos de acabados interiores en un edificio en San Isidro", time: "14:33" },
+      { dir: "outgoing", sender: "Pedro", text: "Claro! A que altura necesitan trabajar?", time: "14:34" },
+      { dir: "incoming", sender: "Carlos", text: "Son techos de unos 10-12 metros. El piso es de concreto liso, es interior", time: "14:35" },
+      { dir: "outgoing", sender: "Pedro", text: "Perfecto, para esa altura y siendo interior te recomiendo la Tijera Electrica de 12m. Es silenciosa y no emite gases. Tiene una capacidad de carga de 320 kg", time: "14:37" },
+      { dir: "incoming", sender: "Carlos", text: "Bien, suena a lo que necesitamos. Cuanto seria el alquiler por semana? La obra esta en Av. Javier Prado 450", time: "14:38" },
+      { dir: "outgoing", sender: "Pedro", text: "Te preparo la cotizacion y te la envio por este medio. Para cuando la necesitarias?", time: "14:40" },
+      { dir: "incoming", sender: "Carlos", text: "Para la proxima semana si es posible. Mi correo es carlos.ramirez@constructoravida.pe por si necesitas enviar algo formal", time: "14:41" },
+      { dir: "outgoing", sender: "Pedro", text: "Perfecto Carlos, te envio la cotizacion hoy mismo. Gracias!", time: "14:42" },
+    ]
+  },
+  {
+    id: 2,
+    name: "Maria Torres — Consulta general",
+    phone: "+51 987 654 321",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Nuevo contacto", "Sin deal"],
+    tagClasses: ["tag-new", "tag-nodeal"],
+    preview: "Pregunta general sobre tipos de equipos disponibles",
+    messages: [
+      { dir: "incoming", sender: "Maria", text: "Hola, vi su pagina web. Queria saber que tipos de equipos tienen disponibles para alquiler?", time: "09:15" },
+      { dir: "outgoing", sender: "Pedro", text: "Buenos dias! Tenemos plataformas articuladas y de tijera, tanto electricas como diesel. Desde 8 hasta 43 metros de altura", time: "09:18" },
+      { dir: "incoming", sender: "Maria", text: "Ah interesante. Soy Maria Torres de la empresa Grupo Industrial del Norte. Estamos evaluando opciones para un proyecto el proximo trimestre", time: "09:20" },
+      { dir: "outgoing", sender: "Pedro", text: "Excelente Maria! Cuando tengan mas definido el proyecto no dudes en contactarnos. Podemos hacer una visita tecnica sin compromiso para recomendar el equipo ideal", time: "09:22" },
+      { dir: "incoming", sender: "Maria", text: "Perfecto, lo tengo en cuenta. Gracias por la informacion!", time: "09:23" },
+    ]
+  },
+  {
+    id: 3,
+    name: "Jorge Mendez — Minera Altiplano",
+    phone: "+51 945 123 456",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "Necesita articulada diesel 20m+ para mina en Cajamarca",
+    messages: [
+      { dir: "incoming", sender: "Jorge", text: "Buenas, soy Jorge Mendez, jefe de mantenimiento de Minera Altiplano. RUC 20567891234", time: "11:00" },
+      { dir: "outgoing", sender: "Ana", text: "Buenos dias Jorge! Un gusto. En que podemos ayudarle?", time: "11:02" },
+      { dir: "incoming", sender: "Jorge", text: "Necesitamos una plataforma articulada diesel para trabajos de mantenimiento en la planta. Altura minima 20 metros. Es en Cajamarca", time: "11:03" },
+      { dir: "incoming", sender: "Jorge", text: "El terreno es irregular y al aire libre. Necesitamos que sea diesel por que no hay tomas electricas cerca", time: "11:04" },
+      { dir: "outgoing", sender: "Ana", text: "Para esas condiciones la Articulada Diesel de 22m seria perfecta. Tiene traccion 4x4, ideal para terreno irregular", time: "11:06" },
+      { dir: "incoming", sender: "Jorge", text: "Que capacidad de carga tiene? Necesitamos subir herramientas pesadas", time: "11:07" },
+      { dir: "outgoing", sender: "Ana", text: "Tiene 230 kg de capacidad. Para cuando necesitan el equipo?", time: "11:08" },
+      { dir: "incoming", sender: "Jorge", text: "Lo antes posible. Este mes. El costo es contra factura y orden de compra. Mi email es jmendez@mineraaltiplano.com", time: "11:10" },
+      { dir: "outgoing", sender: "Ana", text: "Entendido Jorge. Le preparo la propuesta con transporte a Cajamarca incluido. Se la envio hoy", time: "11:12" },
+      { dir: "incoming", sender: "Jorge", text: "Perfecto gracias Ana. Si el precio esta bien cerramos esta semana", time: "11:13" },
+    ]
+  },
+  {
+    id: 4,
+    name: "Luis — Conversacion personal",
+    phone: "+51 999 111 222",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["No relevante"],
+    tagClasses: ["tag-irrelevant"],
+    preview: "Conversacion personal entre colegas",
+    messages: [
+      { dir: "incoming", sender: "Luis", text: "Oye Pedro, vamos a almorzar hoy?", time: "12:30" },
+      { dir: "outgoing", sender: "Pedro", text: "Dale! A la 1 en el chifa de siempre?", time: "12:31" },
+      { dir: "incoming", sender: "Luis", text: "Si perfecto. Llego en 20 minutos", time: "12:32" },
+      { dir: "outgoing", sender: "Pedro", text: "Listo nos vemos ahi", time: "12:33" },
+    ]
+  },
+  {
+    id: 5,
+    name: "Rosa Gutierrez — Cliente existente",
+    phone: "+51 976 543 210",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Actualizar", "Deal"],
+    tagClasses: ["tag-update", "tag-deal"],
+    preview: "Cliente recurrente pide otro equipo para obra nueva",
+    messages: [
+      { dir: "incoming", sender: "Rosa", text: "Pedro hola! Soy Rosa de Edificaciones del Sur, como estas?", time: "16:00" },
+      { dir: "outgoing", sender: "Pedro", text: "Rosa! Que tal, todo bien. Como les fue con la articulada del mes pasado?", time: "16:02" },
+      { dir: "incoming", sender: "Rosa", text: "Muy bien, justamente por eso te escribo. Tenemos otra obra en Miraflores y necesitamos dos tijeras electricas de 8 metros", time: "16:03" },
+      { dir: "incoming", sender: "Rosa", text: "La obra es en Av. Benavides 2450, empezamos el 15 de este mes", time: "16:04" },
+      { dir: "outgoing", sender: "Pedro", text: "Excelente! Dos tijeras de 8m electricas para el 15. Deja verifico disponibilidad", time: "16:05" },
+      { dir: "outgoing", sender: "Pedro", text: "Si hay disponibilidad. Te mando la cotizacion al correo de siempre?", time: "16:08" },
+      { dir: "incoming", sender: "Rosa", text: "Si por favor, al rgutierrez@edificacionesdelsur.pe. Gracias Pedro!", time: "16:09" },
+    ]
+  }
+];
+
+// ── SYSTEM PROMPT ─────────────────────────────────────────────
+const SYSTEM_PROMPT = `Eres un asistente de CRM para Maxim Domenech Peru, empresa de alquiler de maquinaria de elevacion (plataformas tijera y articuladas).
+
+Analiza la siguiente conversacion de WhatsApp entre un comercial y un contacto. Tu tarea es:
+
+1. CLASIFICAR si la conversacion es relevante para el CRM (comercial/ventas) o no (personal/spam/interno).
+
+2. EXTRAER la siguiente informacion si esta disponible:
+   - nombre_contacto, apellido_contacto
+   - empresa, razon_social, ruc
+   - email, telefono_adicional
+   - sector (construccion, mineria, industrial, eventos, otro)
+   - equipo_interes (tipo y altura si se menciona)
+   - ubicacion_obra (ciudad, distrito, direccion)
+   - urgencia (alta/media/baja)
+
+3. DECIDIR que acciones tomar:
+   - crear_contacto: true/false (true si es un contacto nuevo que no parece estar ya en el CRM)
+   - actualizar_contacto: true/false (true si parece un contacto existente con datos nuevos)
+   - crear_empresa: true/false
+   - crear_deal: true/false
+   - etapa_deal: "consulta_inicial" | "cotizacion" | "negociacion" | null
+   - crear_tarea: true/false (true siempre que haya un deal o una accion pendiente del comercial)
+   - tarea_asunto: string con el asunto de la tarea para el comercial (ej: "Cotizar Plataforma Tijera 12m - Constructora Vida")
+   - tarea_descripcion: string con detalle de lo que debe hacer el comercial
+   - tarea_fecha_vencimiento: fecha en formato YYYY-MM-DD. Usar el dia siguiente a la conversacion SALVO que la conversacion mencione una fecha o urgencia especifica
+   - resumen: 2-3 frases describiendo la oportunidad o la conversacion
+
+4. Responde SOLO en formato JSON valido. Si un campo no se puede determinar, usa null. Si la conversacion no es relevante, responde: {"relevante": false, "razon": "..."}
+
+Ejemplo de respuesta para conversacion relevante:
+{
+  "relevante": true,
+  "datos": {
+    "nombre_contacto": "Carlos",
+    "apellido_contacto": "Ramirez",
+    "empresa": "Constructora Vida",
+    "razon_social": "Constructora Vida SAC",
+    "ruc": null,
+    "email": "carlos@ejemplo.com",
+    "telefono_adicional": null,
+    "sector": "construccion",
+    "equipo_interes": "Plataforma tijera 12m electrica",
+    "ubicacion_obra": "San Isidro, Lima",
+    "urgencia": "media"
+  },
+  "acciones": {
+    "crear_contacto": true,
+    "actualizar_contacto": false,
+    "crear_empresa": true,
+    "crear_deal": true,
+    "etapa_deal": "cotizacion",
+    "crear_tarea": true,
+    "tarea_asunto": "Cotizar Plataforma Tijera 12m Electrica - Constructora Vida SAC",
+    "tarea_descripcion": "Enviar cotizacion de alquiler semanal de Tijera 12m Electrica para obra en San Isidro. Cliente necesita equipo para la proxima semana.",
+    "tarea_fecha_vencimiento": "2026-04-05",
+    "resumen": "Carlos de Constructora Vida necesita tijera electrica de 12m para acabados interiores en San Isidro. Solicito cotizacion semanal, necesita equipo para la proxima semana."
+  }
+}`;
+
+// ── APP STATE ─────────────────────────────────────────────────
+let selectedConv = null;
+let lastResult = null;
+
+// ── RENDER CONVERSATION LIST ──────────────────────────────────
+function renderList() {
+  const list = document.getElementById('conv-list');
+  document.getElementById('conv-count').textContent = `${CONVERSATIONS.length} ejemplos`;
+  list.innerHTML = CONVERSATIONS.map(c => `
+    <div class="conv-item${selectedConv?.id === c.id ? ' active' : ''}" onclick="selectConv(${c.id})">
+      <div class="name">${c.name}</div>
+      <div class="preview">${c.preview}</div>
+      <div class="tags">
+        ${c.tags.map((t, i) => `<span class="tag ${c.tagClasses[i]}">${t}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── SELECT CONVERSATION ───────────────────────────────────────
+function selectConv(id) {
+  selectedConv = CONVERSATIONS.find(c => c.id === id);
+  lastResult = null;
+  document.getElementById('btn-json').style.display = 'none';
+  document.getElementById('status').textContent = '';
+  document.getElementById('status').className = 'status-text';
+  renderList();
+  renderChat();
+  document.getElementById('btn-analyze').disabled = false;
+  document.getElementById('custom-conv').value = '';
+}
+
+// ── RENDER CHAT ───────────────────────────────────────────────
+function renderChat() {
+  if (!selectedConv) return;
+  document.getElementById('chat-contact').textContent = selectedConv.name;
+  document.getElementById('chat-phone').textContent = selectedConv.phone + ' — Comercial: ' + selectedConv.comercial;
+
+  const area = document.getElementById('chat-area');
+  area.innerHTML = selectedConv.messages.map(m => `
+    <div class="msg ${m.dir}">
+      <div class="sender">${m.sender}</div>
+      ${m.text}
+      <div class="time">${m.time}</div>
+    </div>
+  `).join('');
+  area.scrollTop = area.scrollHeight;
+}
+
+// ── FORMAT CONVERSATION FOR AI ────────────────────────────────
+function formatConversation(conv) {
+  if (conv) {
+    const lines = conv.messages.map(m =>
+      `[${m.time}] ${m.sender} (${m.dir === 'outgoing' ? 'comercial Maxim' : 'contacto, tel: ' + conv.phone}): ${m.text}`
+    );
+    return lines.join('\n');
+  }
+  return document.getElementById('custom-conv').value;
+}
+
+// ── ANALYZE WITH AI ───────────────────────────────────────────
+async function analyzeConversation() {
+  const btn = document.getElementById('btn-analyze');
+  const status = document.getElementById('status');
+
+  const customText = document.getElementById('custom-conv').value.trim();
+  let convText;
+
+  if (customText && !selectedConv) {
+    convText = customText;
+    document.getElementById('chat-contact').textContent = 'Conversacion personalizada';
+    document.getElementById('chat-phone').textContent = '';
+    // Render custom text as chat
+    const area = document.getElementById('chat-area');
+    area.innerHTML = `<div style="background: white; border-radius: 10px; padding: 16px; font-size: 13px; white-space: pre-wrap; line-height: 1.6;">${customText}</div>`;
+  } else if (selectedConv) {
+    convText = formatConversation(selectedConv);
+  } else {
+    status.textContent = 'Selecciona una conversacion o pega una personalizada';
+    status.className = 'status-text error';
+    return;
+  }
+
+  btn.disabled = true;
+  status.innerHTML = '<span class="spinner"></span> Analizando con Claude API...';
+  status.className = 'status-text processing';
+
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1024,
+        system: SYSTEM_PROMPT,
+        messages: [
+          { role: 'user', content: `Analiza esta conversacion de WhatsApp:\n\n${convText}` }
+        ]
+      })
+    });
+
+    if (!response.ok) {
+      const errData = await response.json();
+      throw new Error(errData.error?.message || `Error ${response.status}`);
+    }
+
+    const data = await response.json();
+    const text = data.content[0].text;
+
+    // Parse JSON from response (handle markdown code blocks)
+    let jsonStr = text;
+    const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
+    if (jsonMatch) jsonStr = jsonMatch[1];
+    lastResult = JSON.parse(jsonStr.trim());
+
+    status.textContent = 'Analisis completado';
+    status.className = 'status-text done';
+    document.getElementById('btn-json').style.display = 'inline-flex';
+
+    showResults();
+  } catch (err) {
+    status.textContent = 'Error: ' + err.message;
+    status.className = 'status-text error';
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// ── SHOW RESULTS ──────────────────────────────────────────────
+function showResults() {
+  if (!lastResult) return;
+  const overlay = document.getElementById('results-overlay');
+  const body = document.getElementById('results-body');
+  const title = document.getElementById('results-title');
+
+  if (!lastResult.relevante) {
+    title.textContent = 'Conversacion no relevante';
+    body.innerHTML = `
+      <div class="result-section no">
+        <h3>&#10060; No se crearan registros en HubSpot</h3>
+        <div class="result-row">
+          <span class="result-label">Razon:</span>
+          <span class="result-value">${lastResult.razon || 'La IA determino que no es una conversacion comercial'}</span>
+        </div>
+      </div>
+    `;
+    overlay.classList.add('visible');
+    return;
+  }
+
+  title.textContent = 'Resultado del analisis IA';
+  const d = lastResult.datos || {};
+  const a = lastResult.acciones || {};
+
+  // Pipeline
+  const stages = ['Consulta inicial', 'Cotizacion', 'Negociacion', 'Cierre'];
+  const activeStage = a.etapa_deal === 'consulta_inicial' ? 0
+    : a.etapa_deal === 'cotizacion' ? 1
+    : a.etapa_deal === 'negociacion' ? 2 : -1;
+
+  const pipelineHTML = a.crear_deal ? `
+    <div class="pipeline">
+      ${stages.map((s, i) => `
+        <span class="pipeline-step ${i <= activeStage ? 'active' : 'inactive'}">${s}</span>
+        ${i < stages.length - 1 ? '<span class="pipeline-arrow">&#8594;</span>' : ''}
+      `).join('')}
+    </div>
+  ` : '';
+
+  body.innerHTML = `
+    <div class="result-section ai">
+      <h3>&#129504; Datos extraidos por la IA</h3>
+      <div class="result-row"><span class="result-label">Nombre:</span><span class="result-value">${d.nombre_contacto || '—'} ${d.apellido_contacto || ''}</span></div>
+      <div class="result-row"><span class="result-label">Empresa:</span><span class="result-value">${d.empresa || '—'}</span></div>
+      <div class="result-row"><span class="result-label">Razon social:</span><span class="result-value">${d.razon_social || '—'}</span></div>
+      <div class="result-row"><span class="result-label">RUC:</span><span class="result-value">${d.ruc || '—'}</span></div>
+      <div class="result-row"><span class="result-label">Email:</span><span class="result-value">${d.email || '—'}</span></div>
+      <div class="result-row"><span class="result-label">Sector:</span><span class="result-value">${d.sector || '—'}</span></div>
+      <div class="result-row"><span class="result-label">Equipo de interes:</span><span class="result-value">${d.equipo_interes || '—'}</span></div>
+      <div class="result-row"><span class="result-label">Ubicacion obra:</span><span class="result-value">${d.ubicacion_obra || '—'}</span></div>
+      <div class="result-row"><span class="result-label">Urgencia:</span><span class="result-value">${d.urgencia || '—'}</span></div>
+    </div>
+
+    <div class="result-section crm">
+      <h3>&#128200; Acciones en HubSpot</h3>
+      <div class="result-row"><span class="result-label">Crear contacto:</span><span class="result-value ${a.crear_contacto ? 'yes' : 'no'}">${a.crear_contacto ? 'Si' : 'No'}</span></div>
+      <div class="result-row"><span class="result-label">Actualizar contacto:</span><span class="result-value ${a.actualizar_contacto ? 'yes' : 'no'}">${a.actualizar_contacto ? 'Si' : 'No'}</span></div>
+      <div class="result-row"><span class="result-label">Crear empresa:</span><span class="result-value ${a.crear_empresa ? 'yes' : 'no'}">${a.crear_empresa ? 'Si' : 'No'}</span></div>
+      <div class="result-row"><span class="result-label">Crear deal:</span><span class="result-value ${a.crear_deal ? 'yes' : 'no'}">${a.crear_deal ? 'Si' : 'No'}</span></div>
+      ${a.crear_deal ? `<div class="result-row"><span class="result-label">Etapa del deal:</span><span class="result-value">${a.etapa_deal || '—'}</span></div>` : ''}
+      ${pipelineHTML}
+      <div class="result-row" style="margin-top: 8px;"><span class="result-label">Resumen:</span><span class="result-value">${a.resumen || '—'}</span></div>
+    </div>
+
+    ${a.crear_tarea ? `
+    <div class="result-section" style="border-left-color: var(--accent);">
+      <h3>&#9993; Tarea para el comercial</h3>
+      <div class="result-row"><span class="result-label">Asunto:</span><span class="result-value" style="font-weight: 700;">${a.tarea_asunto || '—'}</span></div>
+      <div class="result-row"><span class="result-label">Descripcion:</span><span class="result-value">${a.tarea_descripcion || '—'}</span></div>
+      <div class="result-row"><span class="result-label">Fecha vencimiento:</span><span class="result-value" style="color: var(--accent); font-weight: 600;">${a.tarea_fecha_vencimiento || '—'}</span></div>
+      <div class="result-row"><span class="result-label">Asociada a:</span><span class="result-value">Contacto + Empresa + Deal</span></div>
+    </div>
+    ` : ''}
+  `;
+
+  overlay.classList.add('visible');
+}
+
+function showJSON() {
+  if (!lastResult) return;
+  const overlay = document.getElementById('results-overlay');
+  const body = document.getElementById('results-body');
+  document.getElementById('results-title').textContent = 'JSON completo (respuesta IA)';
+  body.innerHTML = `
+    <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Este es el JSON que Make.com recibiria de la Claude API para ejecutar las acciones en HubSpot:</p>
+    <div class="result-json">${JSON.stringify(lastResult, null, 2)}</div>
+  `;
+  overlay.classList.add('visible');
+}
+
+function closeResults() {
+  document.getElementById('results-overlay').classList.remove('visible');
+}
+
+// ── HANDLE CUSTOM TEXT ────────────────────────────────────────
+document.getElementById('custom-conv').addEventListener('input', function() {
+  if (this.value.trim()) {
+    selectedConv = null;
+    lastResult = null;
+    document.getElementById('btn-json').style.display = 'none';
+    document.getElementById('btn-analyze').disabled = false;
+    document.getElementById('status').textContent = '';
+    document.getElementById('chat-contact').textContent = 'Conversacion personalizada';
+    document.getElementById('chat-phone').textContent = '';
+    const area = document.getElementById('chat-area');
+    area.innerHTML = `<div style="background: white; border-radius: 10px; padding: 16px; font-size: 13px; white-space: pre-wrap; line-height: 1.6;">${this.value}</div>`;
+    // Deselect list items
+    document.querySelectorAll('.conv-item').forEach(el => el.classList.remove('active'));
+  }
+});
+
+// ── KEYBOARD SHORTCUT ─────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeResults();
+});
+
+// ── INIT ──────────────────────────────────────────────────────
+renderList();
+</script>
+</body>
+</html>
