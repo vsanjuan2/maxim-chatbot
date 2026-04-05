@@ -420,15 +420,16 @@ Analiza la siguiente conversacion de WhatsApp entre un comercial y un contacto. 
    - urgencia (alta/media/baja)
 
 3. DECIDIR que acciones tomar:
-   - crear_contacto: true/false (true si es un contacto nuevo que no parece estar ya en el CRM)
+   - crear_contacto: true/false (true si es un contacto nuevo que no parece estar ya en el CRM. REQUIERE al menos nombre y telefono o email)
    - actualizar_contacto: true/false (true si parece un contacto existente con datos nuevos)
-   - crear_empresa: true/false
+   - crear_empresa: true/false (SOLO true si se dispone de RUC o razon social completa. Si solo se menciona un nombre comercial sin RUC ni razon social, poner false)
    - crear_deal: true/false
    - etapa_deal: "consulta_inicial" | "cotizacion" | "negociacion" | null
    - crear_tarea: true/false (true siempre que haya un deal o una accion pendiente del comercial)
    - tarea_asunto: string con el asunto de la tarea para el comercial (ej: "Cotizar Plataforma Tijera 12m - Constructora Vida")
-   - tarea_descripcion: string con detalle de lo que debe hacer el comercial
+   - tarea_descripcion: string con detalle de lo que debe hacer el comercial. IMPORTANTE: si faltan datos clave del contacto (RUC, razon social, email), la descripcion DEBE incluir como primer paso "Solicitar datos fiscales completos (RUC, razon social, email) al contacto antes de proceder con la cotizacion."
    - tarea_fecha_vencimiento: fecha en formato YYYY-MM-DD. Usar el dia siguiente a la conversacion SALVO que la conversacion mencione una fecha o urgencia especifica
+   - datos_pendientes: lista de datos importantes que faltan (ej: ["RUC", "razon_social", "email"]). Si no falta nada relevante, usar []
    - resumen: 2-3 frases describiendo la oportunidad o la conversacion
 
 4. Responde SOLO en formato JSON valido. Si un campo no se puede determinar, usa null. Si la conversacion no es relevante, responde: {"relevante": false, "razon": "..."}
@@ -459,6 +460,7 @@ Ejemplo de respuesta para conversacion relevante:
     "tarea_asunto": "Cotizar Plataforma Tijera 12m Electrica - Constructora Vida SAC",
     "tarea_descripcion": "Enviar cotizacion de alquiler semanal de Tijera 12m Electrica para obra en San Isidro. Cliente necesita equipo para la proxima semana.",
     "tarea_fecha_vencimiento": "2026-04-05",
+    "datos_pendientes": [],
     "resumen": "Carlos de Constructora Vida necesita tijera electrica de 12m para acabados interiores en San Isidro. Solicito cotizacion semanal, necesita equipo para la proxima semana."
   }
 }`;
@@ -681,6 +683,14 @@ function showResults() {
       <div class="result-row"><span class="result-label">Descripcion:</span><span class="result-value">${a.tarea_descripcion || '—'}</span></div>
       <div class="result-row"><span class="result-label">Fecha vencimiento:</span><span class="result-value" style="color: var(--accent); font-weight: 600;">${a.tarea_fecha_vencimiento || '—'}</span></div>
       <div class="result-row"><span class="result-label">Asociada a:</span><span class="result-value">Contacto + Empresa + Deal</span></div>
+    </div>
+    ` : ''}
+
+    ${a.datos_pendientes && a.datos_pendientes.length > 0 ? `
+    <div class="result-section no">
+      <h3>&#9888; Datos pendientes de solicitar</h3>
+      <div class="result-row"><span class="result-value" style="color: var(--danger); font-weight: 600;">${a.datos_pendientes.join(', ')}</span></div>
+      <div style="font-size: 12px; color: var(--gray); margin-top: 6px;">El comercial debe solicitar estos datos al contacto antes de proceder.</div>
     </div>
     ` : ''}
 
