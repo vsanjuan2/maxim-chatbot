@@ -722,6 +722,36 @@ function closeResults() {
 }
 
 // ── SEND TO HUBSPOT VIA MAKE.COM ─────────────────────────────
+// Transforma el JSON del analisis IA al MISMO formato que usa el chatbot
+// Make.com decide si crear/actualizar buscando en HubSpot (dedup por email/telefono)
+function transformToWebhookPayload(result) {
+  const d = result.datos || {};
+  const a = result.acciones || {};
+  // Separar ubicacion en ciudad y distrito si es posible
+  const ubicacion = d.ubicacion_obra || '';
+  const partes = ubicacion.split(',').map(s => s.trim());
+  return {
+    nombre: d.nombre_contacto || '',
+    apellido: d.apellido_contacto || '',
+    email: d.email || '',
+    telefono: d.telefono_adicional || '',
+    empresa: d.empresa || '',
+    razon_social: d.razon_social || '',
+    ruc: d.ruc || '',
+    sector: d.sector || '',
+    equipo_recomendado: d.equipo_interes || '',
+    direccion_obra: ubicacion,
+    ciudad_obra: partes.length > 1 ? partes[partes.length - 1] : '',
+    distrito_obra: partes.length > 1 ? partes[0] : '',
+    resumen_conversacion: a.resumen || '',
+    // Campos de tarea (la IA genera asunto y descripcion adaptados a la conversacion)
+    tarea_asunto: a.tarea_asunto || '',
+    tarea_descripcion: a.tarea_descripcion || '',
+    tarea_fecha_vencimiento: a.tarea_fecha_vencimiento || '',
+    fecha: new Date().toISOString()
+  };
+}
+
 async function sendToHubSpot() {
   const btn = document.getElementById('btn-send-hubspot');
   const status = document.getElementById('hubspot-status');
@@ -737,10 +767,11 @@ async function sendToHubSpot() {
   status.textContent = '';
 
   try {
+    const payload = transformToWebhookPayload(lastResult);
     const response = await fetch('/api/webhook', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(lastResult)
+      body: JSON.stringify(payload)
     });
 
     if (!response.ok) {
@@ -749,6 +780,9 @@ async function sendToHubSpot() {
     }
 
     const data = await response.json();
+    if (data.ok === false) {
+      throw new Error(data.msg || 'Error en el webhook');
+    }
     btn.innerHTML = '&#9989; Creado en HubSpot';
     btn.style.background = '#1E8449';
     status.textContent = 'Registros enviados correctamente a Make.com → HubSpot';

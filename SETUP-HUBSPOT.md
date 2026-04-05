@@ -1,14 +1,23 @@
-# Integración Chatbot → Make → HubSpot
+# Integración Chatbot + CRM → Make → HubSpot
 
 ## Resumen del flujo
 
+Hay dos canales que alimentan el mismo pipeline de HubSpot:
+
 ```
-Cliente completa formulario → Chatbot envía datos al proxy
-→ Proxy reenvía a webhook de Make → Make crea en HubSpot:
-  - Contacto (busca si existe por email, si no lo crea)
-  - Empresa (busca si existe por nombre, si no la crea)
-  - Deal/Negocio (siempre crea uno nuevo, asociado al contacto y empresa)
+CANAL A (Web): Cliente usa chatbot → datos estructurados → proxy → Make → HubSpot
+CANAL B (WhatsApp): Comercial analiza conversación en CRM → IA extrae datos → proxy → Make → HubSpot
 ```
+
+Ambos canales envían datos al mismo webhook de Make.com con formato compatible.
+El CRM (Canal B) incluye campos adicionales como acciones de la IA, tareas y datos pendientes.
+Make.com distingue el origen con el campo `origen` ("crm-whatsapp" vs ausente/chatbot).
+
+### Reglas de negocio del CRM (Canal B)
+- **Crear empresa**: SOLO si se dispone de RUC. Sin RUC, no se crea empresa.
+- **Razón social**: Si tiene RUC pero no razón social completa (con tipo societario SAC/SA/SRL/EIRL), se marca como dato pendiente y la tarea indica consultar SUNAT (https://e-consultaruc.sunat.gob.pe).
+- **Datos pendientes**: La IA identifica qué datos faltan (RUC, razón social, email) y los incluye en la tarea del comercial.
+- **Deduplicación**: Canal A por email, Canal B por teléfono.
 
 ## 1. Crear cuenta en Make (gratis)
 
