@@ -78,6 +78,21 @@
   }
   .custom-area textarea:focus { outline: none; border-color: var(--primary); }
   .custom-area .hint { font-size: 11px; color: var(--gray); margin-top: 4px; }
+  .file-upload-row {
+    display: flex; align-items: center; gap: 8px; margin-top: 8px;
+  }
+  .file-upload-row label {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 6px 12px; border-radius: 6px; font-size: 12px;
+    font-weight: 600; cursor: pointer; border: 1px solid var(--primary);
+    color: var(--primary); background: white; transition: all .15s;
+  }
+  .file-upload-row label:hover { background: var(--primary-light); }
+  .file-upload-row input[type="file"] { display: none; }
+  .file-upload-row .file-name {
+    font-size: 11px; color: var(--gray); overflow: hidden;
+    text-overflow: ellipsis; white-space: nowrap; max-width: 180px;
+  }
 
   /* Right Panel */
   .panel-right {
@@ -242,7 +257,12 @@
     <div class="conv-list" id="conv-list"></div>
     <div class="custom-area">
       <textarea id="custom-conv" placeholder="Pega aqui una conversacion real de WhatsApp para analizarla...&#10;&#10;Formato:&#10;[10:30] Cliente: Hola, necesito una tijera...&#10;[10:32] Comercial: Buenos dias! Claro..."></textarea>
-      <div class="hint">Pega una conversacion real o editada. Haz clic en "Analizar con IA" para procesarla.</div>
+      <div class="hint">Pega una conversacion o sube un archivo .txt exportado de WhatsApp.</div>
+      <div class="file-upload-row">
+        <label for="file-input">📎 Subir .txt</label>
+        <input type="file" id="file-input" accept=".txt" onchange="handleFileUpload(this)">
+        <span class="file-name" id="file-name"></span>
+      </div>
     </div>
   </div>
 
@@ -490,6 +510,22 @@ function renderChat() {
     </div>
   `).join('');
   area.scrollTop = area.scrollHeight;
+}
+
+// ── FILE UPLOAD HANDLER ──────────────────────────────────────
+function handleFileUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const nameEl = document.getElementById('file-name');
+  nameEl.textContent = file.name;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    document.getElementById('custom-conv').value = e.target.result;
+    selectedConv = null;
+    document.querySelectorAll('.conv-item').forEach(el => el.classList.remove('active'));
+    document.getElementById('btn-analyze').disabled = false;
+  };
+  reader.readAsText(file);
 }
 
 // ── FORMAT CONVERSATION FOR AI ────────────────────────────────

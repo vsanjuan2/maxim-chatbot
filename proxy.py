@@ -23,11 +23,11 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(CARPETA), **kwargs)
 
-    # Redirigir / a la página del chatbot
+    # Redirigir / a la página de inicio
     def do_GET(self):
         if self.path == "/":
             self.send_response(301)
-            self.send_header("Location", "/index.html")
+            self.send_header("Location", "/landing.html")
             self.end_headers()
             return
         super().do_GET()

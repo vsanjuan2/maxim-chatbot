@@ -3,7 +3,7 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # Copiar archivos de la app
-COPY proxy.py index.html prototipo-crm.html ./
+COPY proxy.py landing.html index.html prototipo-crm.html ./
 
 # Puerto dinámico de Cloud Run
 ENV PORT=8080
