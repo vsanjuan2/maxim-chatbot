@@ -683,6 +683,13 @@ function showResults() {
       <div class="result-row"><span class="result-label">Asociada a:</span><span class="result-value">Contacto + Empresa + Deal</span></div>
     </div>
     ` : ''}
+
+    <div style="text-align: center; margin-top: 16px;">
+      <button class="btn btn-primary" id="btn-send-hubspot" onclick="sendToHubSpot()" style="background: #27AE60; padding: 12px 28px; font-size: 15px;">
+        &#128640; Crear en HubSpot
+      </button>
+      <span id="hubspot-status" style="display: block; margin-top: 8px; font-size: 13px;"></span>
+    </div>
   `;
 
   overlay.classList.add('visible');
@@ -702,6 +709,47 @@ function showJSON() {
 
 function closeResults() {
   document.getElementById('results-overlay').classList.remove('visible');
+}
+
+// ── SEND TO HUBSPOT VIA MAKE.COM ─────────────────────────────
+async function sendToHubSpot() {
+  const btn = document.getElementById('btn-send-hubspot');
+  const status = document.getElementById('hubspot-status');
+
+  if (!lastResult || !lastResult.relevante) {
+    status.textContent = 'No hay datos relevantes para enviar';
+    status.style.color = '#E74C3C';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Enviando a HubSpot...';
+  status.textContent = '';
+
+  try {
+    const response = await fetch('/api/webhook', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(lastResult)
+    });
+
+    if (!response.ok) {
+      const errData = await response.json();
+      throw new Error(errData.error?.message || `Error ${response.status}`);
+    }
+
+    const data = await response.json();
+    btn.innerHTML = '&#9989; Creado en HubSpot';
+    btn.style.background = '#1E8449';
+    status.textContent = 'Registros enviados correctamente a Make.com → HubSpot';
+    status.style.color = '#27AE60';
+  } catch (err) {
+    btn.innerHTML = '&#128640; Crear en HubSpot';
+    btn.disabled = false;
+    status.textContent = 'Error: ' + err.message;
+    status.style.color = '#E74C3C';
+    console.error(err);
+  }
 }
 
 // ── HANDLE CUSTOM TEXT ────────────────────────────────────────
