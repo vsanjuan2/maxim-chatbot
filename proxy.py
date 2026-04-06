@@ -10,6 +10,7 @@ import json
 import http.server
 import urllib.request
 import urllib.error
+import datetime
 from pathlib import Path
 
 API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
@@ -77,6 +78,16 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
 
         length = int(self.headers.get("Content-Length", 0))
         body = self.rfile.read(length)
+
+        # ── LOG: guardar payload para testing ──
+        try:
+            payload = json.loads(body)
+            print(f"[Webhook] Payload: {json.dumps(payload, ensure_ascii=False)}")
+            log_file = CARPETA / "webhook_logs.jsonl"
+            with open(log_file, "a", encoding="utf-8") as f:
+                f.write(json.dumps({"ts": datetime.datetime.utcnow().isoformat(), "payload": payload}, ensure_ascii=False) + "\n")
+        except Exception as log_err:
+            print(f"[Webhook] Error logging payload: {log_err}")
 
         try:
             req = urllib.request.Request(
