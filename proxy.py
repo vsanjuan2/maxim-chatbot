@@ -377,6 +377,12 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header("Location", "/landing.html")
             self.end_headers()
             return
+        if self.path == "/api/timelinesai":
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(json.dumps({"status": "ok", "endpoint": "timelinesai"}).encode())
+            return
         super().do_GET()
 
     def do_OPTIONS(self):
