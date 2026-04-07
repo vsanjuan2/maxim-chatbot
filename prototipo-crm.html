@@ -304,8 +304,10 @@
 </div>
 
 <script>
-// ── SAMPLE CONVERSATIONS ──────────────────────────────────────
+// ── SAMPLE CONVERSATIONS (40 casos) ─────────────────────────
+// Cargado desde conversations.js
 const CONVERSATIONS = [
+  // ─── 1. SOLICITUD PRESUPUESTO ─────────────────────────────────
   {
     id: 1,
     name: "Carlos Ramirez — Constructora Vida",
@@ -330,7 +332,7 @@ const CONVERSATIONS = [
   },
   {
     id: 2,
-    name: "Maria Torres — Consulta general",
+    name: "Maria Torres — Grupo Industrial del Norte",
     phone: "+51 987 654 321",
     comercial: "Pedro (Maxim)",
     comercialPhone: "+51 912 345 678",
@@ -385,7 +387,7 @@ const CONVERSATIONS = [
   },
   {
     id: 5,
-    name: "Rosa Gutierrez — Cliente existente",
+    name: "Rosa Gutierrez — Edificaciones del Sur",
     phone: "+51 976 543 210",
     comercial: "Pedro (Maxim)",
     comercialPhone: "+51 912 345 678",
@@ -401,35 +403,694 @@ const CONVERSATIONS = [
       { dir: "outgoing", sender: "Pedro", text: "Si hay disponibilidad. Te mando la cotizacion al correo de siempre?", time: "16:08" },
       { dir: "incoming", sender: "Rosa", text: "Si por favor, al rgutierrez@edificacionesdelsur.pe. Gracias Pedro!", time: "16:09" },
     ]
+  },
+  // ─── 6-10. AVERIAS / EMERGENCIAS ──────────────────────────────
+  {
+    id: 6,
+    name: "Fernando Diaz — Constructora Lima",
+    phone: "+51 944 556 677",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Averia", "Urgente"],
+    tagClasses: ["tag-update", "tag-deal"],
+    preview: "Tijera electrica no enciende en obra de Surco",
+    messages: [
+      { dir: "incoming", sender: "Fernando", text: "Pedro urgente! La tijera que nos alquilaron no enciende. Estamos parados en la obra", time: "07:15" },
+      { dir: "outgoing", sender: "Pedro", text: "Fernando buenos dias. Que modelo es y desde cuando no enciende?", time: "07:17" },
+      { dir: "incoming", sender: "Fernando", text: "Es la tijera electrica de 10m. Ayer estaba bien pero hoy ni prende. Esta en la obra de Av. Primavera 890, Surco", time: "07:18" },
+      { dir: "incoming", sender: "Fernando", text: "Somos Constructora Lima SAC, RUC 20498765432. Necesitamos que vengan hoy, tenemos plazo de entrega el viernes", time: "07:19" },
+      { dir: "outgoing", sender: "Pedro", text: "Entendido Fernando. Voy a enviar un tecnico esta manana. Probablemente es tema de baterias. Puede ser que se quedo sin carga?", time: "07:21" },
+      { dir: "incoming", sender: "Fernando", text: "Estuvo conectada toda la noche al cargador. Mi correo es fdiaz@constructoralima.pe por si necesitas mandarme algo", time: "07:22" },
+      { dir: "outgoing", sender: "Pedro", text: "Ok Fernando, el tecnico sale en 30 minutos. Te confirmo cuando este en camino", time: "07:24" },
+    ]
+  },
+  {
+    id: 7,
+    name: "Adriana Vega — Ingenieria Total",
+    phone: "+51 955 443 221",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["Averia", "Urgente"],
+    tagClasses: ["tag-update", "tag-deal"],
+    preview: "Articulada diesel pierde aceite hidraulico en Callao",
+    messages: [
+      { dir: "incoming", sender: "Adriana", text: "Ana buenos dias, tenemos un problema con la articulada diesel que tenemos alquilada", time: "08:40" },
+      { dir: "outgoing", sender: "Ana", text: "Hola Adriana, que paso?", time: "08:42" },
+      { dir: "incoming", sender: "Adriana", text: "Esta perdiendo aceite hidraulico por abajo. Ya hay un charco grande en el piso. No nos atrevemos a usarla asi", time: "08:43" },
+      { dir: "incoming", sender: "Adriana", text: "Estamos en el puerto del Callao, zona de almacenes. Ingenieria Total SAC, RUC 20345678901", time: "08:44" },
+      { dir: "outgoing", sender: "Ana", text: "No la usen por favor, es peligroso. Envio un tecnico de inmediato. Pueden darme la ubicacion exacta?", time: "08:45" },
+      { dir: "incoming", sender: "Adriana", text: "Av. Nestor Gambetta 4500, almacen 12. Mi email es avega@ingenieriatotal.com. Necesitamos que el equipo funcione manana como sea", time: "08:47" },
+      { dir: "outgoing", sender: "Ana", text: "El tecnico va en camino. Si no se puede reparar hoy, les enviamos un equipo de reemplazo esta tarde", time: "08:49" },
+      { dir: "incoming", sender: "Adriana", text: "Gracias Ana, esperamos al tecnico", time: "08:50" },
+    ]
+  },
+  {
+    id: 8,
+    name: "Roberto Castillo — Mantenimientos Pro",
+    phone: "+51 966 778 899",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Averia", "Deal"],
+    tagClasses: ["tag-update", "tag-deal"],
+    preview: "Brazo articulado no sube mas de 15m, deberia llegar a 22m",
+    messages: [
+      { dir: "incoming", sender: "Roberto", text: "Pedro, la articulada de 22m que nos mandaron no sube mas de 15 metros. Se queda trabada ahi", time: "10:00" },
+      { dir: "outgoing", sender: "Pedro", text: "Roberto que tal. Suena a problema del sistema de extension. Se escucha algun ruido raro cuando intenta subir?", time: "10:03" },
+      { dir: "incoming", sender: "Roberto", text: "Si, hace un ruido como si el motor se esforzara pero no avanza. Mantenimientos Pro SAC, la obra esta en Av. La Marina 2300, San Miguel", time: "10:05" },
+      { dir: "outgoing", sender: "Pedro", text: "Puede ser una valvula del sistema hidraulico. No fuercen la maquina. Envio tecnico hoy antes de mediodia", time: "10:07" },
+      { dir: "incoming", sender: "Roberto", text: "Dale gracias. Si pueden traer una de reemplazo mejor, la necesitamos a full altura. Email: rcastillo@mantenimientospro.pe, RUC 20456789012", time: "10:09" },
+      { dir: "outgoing", sender: "Pedro", text: "Veo si tengo una disponible. Te confirmo en 1 hora", time: "10:10" },
+    ]
+  },
+  {
+    id: 9,
+    name: "Gabriela Flores — Grupo Acero",
+    phone: "+51 933 445 566",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["Averia", "Urgente"],
+    tagClasses: ["tag-update", "tag-deal"],
+    preview: "Alarma de inclinacion se activa en terreno plano",
+    messages: [
+      { dir: "incoming", sender: "Gabriela", text: "Ana, la tijera electrica de 14m nos esta dando problemas. Se activa la alarma de inclinacion y no nos deja subir", time: "09:30" },
+      { dir: "outgoing", sender: "Ana", text: "Gabriela, el terreno donde estan es plano?", time: "09:32" },
+      { dir: "incoming", sender: "Gabriela", text: "Si, es un piso de concreto nivelado dentro de un almacen. No tiene sentido que salte la alarma", time: "09:33" },
+      { dir: "incoming", sender: "Gabriela", text: "Somos Grupo Acero EIRL, RUC 20234567890. Estamos en Ate, Av. Nicolas Ayllon 3800. Mi correo gflores@grupoacero.pe", time: "09:35" },
+      { dir: "outgoing", sender: "Ana", text: "Puede ser el sensor de inclinacion descalibrado. No es peligroso pero hay que recalibrarlo. Envio tecnico esta manana", time: "09:37" },
+      { dir: "incoming", sender: "Gabriela", text: "Por favor, estamos detenidos desde ayer. Cada hora sin trabajar nos cuesta mucho", time: "09:38" },
+      { dir: "outgoing", sender: "Ana", text: "Entendido, es prioridad. El tecnico llega antes de las 11", time: "09:39" },
+    ]
+  },
+  {
+    id: 10,
+    name: "Miguel Paredes — Electro Industrial",
+    phone: "+51 977 112 233",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Averia", "Deal"],
+    tagClasses: ["tag-update", "tag-deal"],
+    preview: "Cargador de bateria de tijera no funciona",
+    messages: [
+      { dir: "incoming", sender: "Miguel", text: "Hola Pedro, el cargador de la tijera electrica dejo de funcionar anoche. La bateria esta en 10%", time: "06:45" },
+      { dir: "outgoing", sender: "Pedro", text: "Miguel buenos dias. Probaron con otro enchufe? A veces es el tomacorriente", time: "06:50" },
+      { dir: "incoming", sender: "Miguel", text: "Si, probamos en 3 tomas distintas. El indicador del cargador no enciende. Electro Industrial SAC, obra en Jr. Huallaga 350, Centro de Lima", time: "06:52" },
+      { dir: "incoming", sender: "Miguel", text: "RUC 20678901234. Email: mparedes@electroindustrial.pe. Necesitamos la maquina operativa hoy, tenemos inspeccion", time: "06:53" },
+      { dir: "outgoing", sender: "Pedro", text: "Les llevo un cargador de reemplazo esta manana. Salgo en 30 min para alla", time: "06:55" },
+      { dir: "incoming", sender: "Miguel", text: "Excelente Pedro gracias. Te esperamos", time: "06:56" },
+    ]
+  },
+  // ─── 11-20. RESERVAS CON FECHA DEFINIDA ───────────────────────
+  {
+    id: 11,
+    name: "Patricia Huaman — JCM Ingenieros",
+    phone: "+51 988 776 655",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "Reserva 2 tijeras electricas 8m para el 20 de abril",
+    messages: [
+      { dir: "incoming", sender: "Patricia", text: "Buenos dias, soy Patricia Huaman de JCM Ingenieros SAC. RUC 20789012345", time: "10:00" },
+      { dir: "outgoing", sender: "Ana", text: "Buenos dias Patricia! En que podemos ayudarla?", time: "10:02" },
+      { dir: "incoming", sender: "Patricia", text: "Necesitamos reservar 2 tijeras electricas de 8 metros para una obra en La Molina. Las necesitamos del 20 de abril al 15 de mayo", time: "10:04" },
+      { dir: "incoming", sender: "Patricia", text: "La obra es en Av. Raul Ferrero 1200, La Molina. Interior de centro comercial, piso liso", time: "10:05" },
+      { dir: "outgoing", sender: "Ana", text: "Perfecto Patricia. 2 tijeras electricas 8m del 20/04 al 15/05. Verifico disponibilidad", time: "10:07" },
+      { dir: "outgoing", sender: "Ana", text: "Confirmado, tenemos disponibilidad. Le envio la cotizacion. A que correo?", time: "10:15" },
+      { dir: "incoming", sender: "Patricia", text: "A phuaman@jcmingenieros.com. Necesito que incluya transporte y operador", time: "10:16" },
+      { dir: "outgoing", sender: "Ana", text: "Entendido, incluyo todo. Se la envio en la proxima hora", time: "10:17" },
+    ]
+  },
+  {
+    id: 12,
+    name: "Andres Rojas — Constructora Pacifico",
+    phone: "+51 922 334 556",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "Reserva articulada diesel 16m para obra en Ica, 1 de mayo",
+    messages: [
+      { dir: "incoming", sender: "Andres", text: "Hola buenas. Soy Andres Rojas de Constructora Pacifico. Necesito cotizar una articulada diesel", time: "15:20" },
+      { dir: "outgoing", sender: "Pedro", text: "Hola Andres! Claro. Para que tipo de trabajo y a que altura?", time: "15:22" },
+      { dir: "incoming", sender: "Andres", text: "Mantenimiento de fachada de un hotel en Ica. Necesitamos llegar a unos 16 metros. Es exterior, terreno de arena", time: "15:24" },
+      { dir: "outgoing", sender: "Pedro", text: "Para exterior con arena necesitan diesel con traccion. La articulada diesel de 16m seria ideal. Para cuando?", time: "15:26" },
+      { dir: "incoming", sender: "Andres", text: "Del 1 al 20 de mayo. RUC 20890123456. Correo: arojas@constructorapacifico.pe", time: "15:28" },
+      { dir: "incoming", sender: "Andres", text: "La direccion es Av. Los Maestros km 3.5, Ica. Necesitamos que incluyan transporte desde Lima", time: "15:29" },
+      { dir: "outgoing", sender: "Pedro", text: "Perfecto Andres, preparo cotizacion con transporte Lima-Ica incluido. Te la envio hoy", time: "15:31" },
+    ]
+  },
+  {
+    id: 13,
+    name: "Lucia Vargas — Hospital Regional",
+    phone: "+51 911 223 344",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "Reserva tijera 14m para mantenimiento de hospital, 10 de abril",
+    messages: [
+      { dir: "incoming", sender: "Lucia", text: "Buenas tardes, soy Lucia Vargas del area de mantenimiento del Hospital Regional de Huancayo", time: "14:00" },
+      { dir: "outgoing", sender: "Ana", text: "Buenas tardes Lucia. En que podemos ayudarle?", time: "14:02" },
+      { dir: "incoming", sender: "Lucia", text: "Necesitamos una plataforma para trabajos de mantenimiento de aire acondicionado en el techo del hospital. Altura 12-14 metros", time: "14:04" },
+      { dir: "incoming", sender: "Lucia", text: "Es interior, piso liso. Necesitamos que sea electrica y silenciosa porque es un hospital", time: "14:05" },
+      { dir: "outgoing", sender: "Ana", text: "La tijera electrica de 14m es perfecta. Silenciosa y sin emisiones. Cuando la necesitan?", time: "14:07" },
+      { dir: "incoming", sender: "Lucia", text: "Del 10 al 18 de abril. RUC 20345678901. La direccion es Jr. Daniel Carrion 150, Huancayo. Email: lvargas@hospitalregional.gob.pe", time: "14:09" },
+      { dir: "outgoing", sender: "Ana", text: "Anotado. Le envio cotizacion con transporte a Huancayo. Se la mando hoy", time: "14:11" },
+    ]
+  },
+  {
+    id: 14,
+    name: "Ricardo Soto — Inmobiliaria Cenit",
+    phone: "+51 944 667 889",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "3 tijeras para proyecto residencial, entrega 25 abril",
+    messages: [
+      { dir: "incoming", sender: "Ricardo", text: "Pedro hola, me recomendo tu contacto un colega. Soy Ricardo Soto de Inmobiliaria Cenit SAC", time: "11:30" },
+      { dir: "outgoing", sender: "Pedro", text: "Hola Ricardo! Un placer. Como te puedo ayudar?", time: "11:32" },
+      { dir: "incoming", sender: "Ricardo", text: "Tenemos un proyecto residencial grande en Surco. Necesitamos 3 plataformas de tijera: dos de 8m y una de 12m, todas electricas", time: "11:34" },
+      { dir: "incoming", sender: "Ricardo", text: "Las necesitamos a partir del 25 de abril por 2 meses minimo. RUC 20901234567", time: "11:35" },
+      { dir: "outgoing", sender: "Pedro", text: "Excelente proyecto Ricardo. Verifico disponibilidad de las 3 unidades. La obra donde seria exactamente?", time: "11:37" },
+      { dir: "incoming", sender: "Ricardo", text: "Calle Los Alamos 890, Surco. Interior del condominio. Correo: rsoto@inmobiliariacenit.pe", time: "11:38" },
+      { dir: "outgoing", sender: "Pedro", text: "Tengo las 3 disponibles. Te envio cotizacion con descuento por volumen. Para 2 meses el precio es bastante competitivo", time: "11:45" },
+      { dir: "incoming", sender: "Ricardo", text: "Genial, esperamos la cotizacion. Si el precio esta bien cerramos esta semana", time: "11:46" },
+    ]
+  },
+  {
+    id: 15,
+    name: "Carmen Quispe — Minera del Sur",
+    phone: "+51 955 778 990",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "Articulada diesel 28m para mina en Arequipa, 5 mayo",
+    messages: [
+      { dir: "incoming", sender: "Carmen", text: "Hola buenas, necesito cotizar una plataforma articulada de gran altura para nuestra operacion minera", time: "08:00" },
+      { dir: "outgoing", sender: "Ana", text: "Buenos dias! Claro, a que altura necesitan trabajar y en que condiciones?", time: "08:03" },
+      { dir: "incoming", sender: "Carmen", text: "Minimo 25 metros. Es al aire libre en terreno de gravilla. Necesita ser diesel. Soy Carmen Quispe, jefa de operaciones de Minera del Sur", time: "08:05" },
+      { dir: "outgoing", sender: "Ana", text: "Para esas condiciones la Articulada Diesel de 28m con 4x4 seria ideal. Donde estan ubicados?", time: "08:07" },
+      { dir: "incoming", sender: "Carmen", text: "En Cerro Verde, Arequipa. RUC 20123456789. La necesitamos del 5 de mayo al 30 de junio", time: "08:09" },
+      { dir: "incoming", sender: "Carmen", text: "Email: cquispe@mineradelsur.com.pe. Necesitamos incluir operador certificado y transporte", time: "08:10" },
+      { dir: "outgoing", sender: "Ana", text: "Perfecto Carmen. Preparo propuesta completa con transporte Lima-Arequipa, operador y seguro. Se la envio manana a primera hora", time: "08:12" },
+    ]
+  },
+  {
+    id: 16,
+    name: "Diego Alvarez — Alvarez & Hijos Construccion",
+    phone: "+51 966 554 332",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Actualizar", "Deal"],
+    tagClasses: ["tag-update", "tag-deal"],
+    preview: "Extiende alquiler de tijera y reserva articulada para 15 abril",
+    messages: [
+      { dir: "incoming", sender: "Diego", text: "Pedro como estas? Soy Diego de Alvarez & Hijos", time: "13:00" },
+      { dir: "outgoing", sender: "Pedro", text: "Diego! Todo bien. Que necesitas?", time: "13:02" },
+      { dir: "incoming", sender: "Diego", text: "Dos cosas: primero, necesitamos extender el alquiler de la tijera de 10m por 2 semanas mas", time: "13:03" },
+      { dir: "incoming", sender: "Diego", text: "Y segundo, necesitamos una articulada electrica de 16m para otra obra. La necesitamos para el 15 de abril", time: "13:04" },
+      { dir: "incoming", sender: "Diego", text: "La obra nueva es en Av. Arequipa 4500, Miraflores. Interior de edificio, 5to piso abierto", time: "13:05" },
+      { dir: "outgoing", sender: "Pedro", text: "Perfecto Diego. Extension de tijera 10m por 2 semanas mas + articulada 16m electrica para el 15/04. Verifico disponibilidad", time: "13:07" },
+      { dir: "outgoing", sender: "Pedro", text: "Confirmado todo. Te mando cotizacion actualizada al correo de siempre", time: "13:15" },
+      { dir: "incoming", sender: "Diego", text: "Si, al dalvarez@alvarezconstruccion.pe. RUC 20567890123. Gracias Pedro!", time: "13:16" },
+    ]
+  },
+  {
+    id: 17,
+    name: "Valeria Medina — Telecomunicaciones Andinas",
+    phone: "+51 977 665 443",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "Articulada 20m para instalacion de antenas, 22 abril",
+    messages: [
+      { dir: "incoming", sender: "Valeria", text: "Hola, necesito una plataforma para instalacion de antenas de telecomunicaciones", time: "09:00" },
+      { dir: "outgoing", sender: "Ana", text: "Buenos dias! Claro. A que altura necesitan trabajar?", time: "09:02" },
+      { dir: "incoming", sender: "Valeria", text: "Las torres son de 18-20 metros. Es en exterior, en un cerro en Chosica. Soy Valeria Medina de Telecomunicaciones Andinas", time: "09:04" },
+      { dir: "outgoing", sender: "Ana", text: "Para esa altura y terreno en cerro, la articulada diesel de 20m con 4x4 es la indicada", time: "09:06" },
+      { dir: "incoming", sender: "Valeria", text: "RUC 20678901234. Necesitamos del 22 de abril al 5 de mayo. Direccion: Carretera Central km 35, Chosica", time: "09:08" },
+      { dir: "incoming", sender: "Valeria", text: "Mi correo es vmedina@telecoandinas.pe. Es urgente porque tenemos compromiso con el operador de celulares", time: "09:09" },
+      { dir: "outgoing", sender: "Ana", text: "Entendido Valeria. Le envio propuesta hoy con todo incluido", time: "09:11" },
+    ]
+  },
+  {
+    id: 18,
+    name: "Hugo Salazar — Centro Comercial Plaza Norte",
+    phone: "+51 988 112 334",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "4 tijeras electricas para remodelacion, entrega 1 mayo",
+    messages: [
+      { dir: "incoming", sender: "Hugo", text: "Buenos dias, soy Hugo Salazar, gerente de mantenimiento de Plaza Norte. Necesitamos varias plataformas", time: "08:30" },
+      { dir: "outgoing", sender: "Pedro", text: "Buenos dias Hugo! Cuantas unidades necesitan y para que trabajo?", time: "08:33" },
+      { dir: "incoming", sender: "Hugo", text: "Vamos a remodelar el ala este del centro comercial. Necesitamos 4 tijeras electricas: 2 de 8m y 2 de 12m", time: "08:35" },
+      { dir: "incoming", sender: "Hugo", text: "El trabajo se hace de noche cuando cierra el centro comercial. Del 1 de mayo al 30 de junio", time: "08:36" },
+      { dir: "outgoing", sender: "Pedro", text: "Entendido. 4 unidades para trabajo nocturno. Puedo visitarlos para evaluar accesos?", time: "08:38" },
+      { dir: "incoming", sender: "Hugo", text: "Si claro. Av. Alfredo Mendiola 1400, Independencia. RUC 20789012345. Email: hsalazar@plazanorte.com.pe", time: "08:40" },
+      { dir: "outgoing", sender: "Pedro", text: "Paso manana a las 10am para ver accesos y medidas. Le envio cotizacion despues de la visita", time: "08:42" },
+    ]
+  },
+  {
+    id: 19,
+    name: "Elena Paredes — Ingenieria & Puentes SAC",
+    phone: "+51 933 998 776",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "Articulada diesel 35m para puente, reserva 8 abril",
+    messages: [
+      { dir: "incoming", sender: "Elena", text: "Buenas tardes, necesitamos un equipo de gran alcance para inspeccion de un puente", time: "16:30" },
+      { dir: "outgoing", sender: "Ana", text: "Buenas tardes! Que altura y alcance lateral necesitan?", time: "16:32" },
+      { dir: "incoming", sender: "Elena", text: "El puente tiene 30 metros de altura. Necesitamos una articulada que pueda trabajar por debajo del tablero. Elena Paredes, Ingenieria & Puentes SAC", time: "16:34" },
+      { dir: "outgoing", sender: "Ana", text: "Para eso la articulada diesel de 35m con brazo articulado es ideal. Permite trabajar en negativo debajo de estructuras", time: "16:36" },
+      { dir: "incoming", sender: "Elena", text: "Exacto eso necesitamos. Del 8 al 12 de abril. Es en el puente sobre el rio Rimac, Chosica. RUC 20890123456", time: "16:38" },
+      { dir: "incoming", sender: "Elena", text: "Correo: eparedes@ingenieriapuentes.pe. Necesitamos operador con experiencia en puentes", time: "16:39" },
+      { dir: "outgoing", sender: "Ana", text: "Tenemos operadores certificados para ese tipo de trabajo. Le envio propuesta manana", time: "16:41" },
+    ]
+  },
+  {
+    id: 20,
+    name: "Oscar Ramos — Petroquimica del Norte",
+    phone: "+51 944 887 665",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "2 articuladas diesel para refineria, entrega 15 mayo",
+    messages: [
+      { dir: "incoming", sender: "Oscar", text: "Hola, necesitamos equipos para parada de planta en nuestra refineria en Talara", time: "11:00" },
+      { dir: "outgoing", sender: "Pedro", text: "Hola! Que tipo de trabajos y a que alturas?", time: "11:03" },
+      { dir: "incoming", sender: "Oscar", text: "Mantenimiento de torres de destilacion. Necesitamos 2 articuladas diesel, una de 22m y otra de 28m", time: "11:05" },
+      { dir: "incoming", sender: "Oscar", text: "La parada de planta es del 15 de mayo al 15 de junio. Es zona ATEX, necesitamos equipos certificados", time: "11:06" },
+      { dir: "outgoing", sender: "Pedro", text: "Nuestras articuladas diesel tienen certificacion para zonas ATEX. Para Talara incluimos transporte y operadores. Quienes son?", time: "11:08" },
+      { dir: "incoming", sender: "Oscar", text: "Petroquimica del Norte SAC, RUC 20456789012. Av. Industrial 200, Talara, Piura. Oscar Ramos, jefe de parada. Email: oramos@petroquimicadelnorte.pe", time: "11:10" },
+      { dir: "outgoing", sender: "Pedro", text: "Oscar, te envio propuesta completa esta semana. Incluyo visita previa de seguridad", time: "11:12" },
+    ]
+  },
+  // ─── 21-30. SOLICITUDES PRESUPUESTO VARIADAS ──────────────────
+  {
+    id: 21,
+    name: "Pilar Navarro — Hotel Libertador",
+    phone: "+51 955 221 443",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "Tijera electrica 10m para pintura de fachada interior de hotel",
+    messages: [
+      { dir: "incoming", sender: "Pilar", text: "Buenas, necesito cotizar una plataforma para pintar el lobby del hotel. Soy Pilar Navarro, Hotel Libertador Cusco", time: "10:30" },
+      { dir: "outgoing", sender: "Ana", text: "Buenos dias Pilar! A que altura es el lobby?", time: "10:32" },
+      { dir: "incoming", sender: "Pilar", text: "Unos 9-10 metros. Es interior con piso de marmol, necesitamos algo que no dane el piso", time: "10:34" },
+      { dir: "outgoing", sender: "Ana", text: "La tijera electrica de 10m tiene llantas que no marcan. Perfecta para pisos delicados", time: "10:36" },
+      { dir: "incoming", sender: "Pilar", text: "Ideal. RUC 20345678901. Av. Sol 395, Cusco. Email: pnavarro@libertador.com.pe. Necesitamos para la segunda quincena de abril", time: "10:38" },
+      { dir: "outgoing", sender: "Ana", text: "Le envio cotizacion con transporte a Cusco incluido hoy mismo", time: "10:40" },
+    ]
+  },
+  {
+    id: 22,
+    name: "Raul Espinoza — Astillero San Martin",
+    phone: "+51 966 332 114",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "Articulada 22m para mantenimiento de barco en dique seco",
+    messages: [
+      { dir: "incoming", sender: "Raul", text: "Hola, soy Raul Espinoza del Astillero San Martin. Necesitamos una plataforma para trabajar en el casco de un barco en dique seco", time: "07:30" },
+      { dir: "outgoing", sender: "Pedro", text: "Raul buenos dias. Que dimensiones tiene el barco y que tipo de trabajo?", time: "07:33" },
+      { dir: "incoming", sender: "Raul", text: "El casco tiene 20 metros de alto. Necesitamos pintar y soldar. Es exterior, junto al mar, piso de concreto", time: "07:35" },
+      { dir: "outgoing", sender: "Pedro", text: "La articulada diesel de 22m seria perfecta. Resiste ambiente salino. Cuando la necesitan?", time: "07:37" },
+      { dir: "incoming", sender: "Raul", text: "Del 12 al 30 de abril. RUC 20567890123. Puerto del Callao, Muelle 8. Email: respinoza@astillerosanmartin.pe", time: "07:39" },
+      { dir: "outgoing", sender: "Pedro", text: "Perfecto Raul. Te envio cotizacion hoy. Incluyo lavado especial post-uso por el ambiente salino", time: "07:41" },
+    ]
+  },
+  {
+    id: 23,
+    name: "Sandra Ruiz — Cementos Lima",
+    phone: "+51 977 445 667",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "Tijera diesel 14m para planta cementera, terreno polvoriento",
+    messages: [
+      { dir: "incoming", sender: "Sandra", text: "Buenas tardes. Sandra Ruiz de Cementos Lima. Necesitamos una plataforma para mantenimiento de silos", time: "15:00" },
+      { dir: "outgoing", sender: "Ana", text: "Buenas tardes Sandra. A que altura estan los silos?", time: "15:02" },
+      { dir: "incoming", sender: "Sandra", text: "12-14 metros. El problema es que el terreno es de tierra y hay mucho polvo. No creo que funcione una electrica", time: "15:04" },
+      { dir: "outgoing", sender: "Ana", text: "Correcto, para esas condiciones la tijera diesel de 14m es mejor. Tiene filtros reforzados para ambientes con polvo", time: "15:06" },
+      { dir: "incoming", sender: "Sandra", text: "Bien. RUC 20678901234. Planta Atocongo, Av. Atocongo km 5. Email: sruiz@cementoslima.com.pe", time: "15:08" },
+      { dir: "incoming", sender: "Sandra", text: "Seria por 3 semanas a partir del 20 de abril", time: "15:09" },
+      { dir: "outgoing", sender: "Ana", text: "Le envio propuesta manana Sandra. Incluyo mantenimiento semanal por las condiciones del ambiente", time: "15:11" },
+    ]
+  },
+  {
+    id: 24,
+    name: "Felipe Morales — Municipalidad de Trujillo",
+    phone: "+51 988 556 778",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "Articulada 16m para poda de arboles y alumbrado publico",
+    messages: [
+      { dir: "incoming", sender: "Felipe", text: "Buenos dias, soy Felipe Morales de la Municipalidad de Trujillo. Necesitamos plataformas para mantenimiento de alumbrado publico", time: "09:00" },
+      { dir: "outgoing", sender: "Pedro", text: "Buenos dias Felipe! Que alturas manejan los postes?", time: "09:03" },
+      { dir: "incoming", sender: "Felipe", text: "Los postes son de 12-15 metros. Tambien necesitamos podar arboles grandes. Es en avenidas, trabajo en exterior", time: "09:05" },
+      { dir: "outgoing", sender: "Pedro", text: "La articulada diesel de 16m con 4x4 es ideal para trabajar en calles. Permite estacionar a distancia y llegar con el brazo", time: "09:07" },
+      { dir: "incoming", sender: "Felipe", text: "RUC 20789012345. Av. Espana 400, Trujillo. La necesitamos del 1 al 15 de mayo. fmorales@munitrujillo.gob.pe", time: "09:09" },
+      { dir: "outgoing", sender: "Pedro", text: "Le envio cotizacion con transporte Lima-Trujillo. Incluyo senalizacion vial como complemento", time: "09:11" },
+    ]
+  },
+  {
+    id: 25,
+    name: "Isabel Campos — Estadio Nacional",
+    phone: "+51 933 667 889",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "Articulada 28m para mantenimiento de techo del estadio",
+    messages: [
+      { dir: "incoming", sender: "Isabel", text: "Hola, soy Isabel Campos del area de infraestructura del Estadio Nacional. Necesitamos una plataforma de gran altura", time: "11:00" },
+      { dir: "outgoing", sender: "Ana", text: "Hola Isabel! Para que tipo de trabajo y a que altura?", time: "11:02" },
+      { dir: "incoming", sender: "Isabel", text: "Mantenimiento de la estructura metalica del techo. Son 25-28 metros. Interior del estadio, piso de concreto", time: "11:04" },
+      { dir: "outgoing", sender: "Ana", text: "La articulada electrica de 28m seria perfecta. Silenciosa y sin emisiones para espacio cerrado", time: "11:06" },
+      { dir: "incoming", sender: "Isabel", text: "Necesitamos del 10 al 20 de abril. Calle Jose Diaz s/n, Cercado de Lima. RUC 20890123456. Email: icampos@estadionacional.pe", time: "11:08" },
+      { dir: "outgoing", sender: "Ana", text: "Entendido Isabel. Necesitaremos hacer una visita para evaluar accesos al interior del estadio. Cuando podriamos ir?", time: "11:10" },
+      { dir: "incoming", sender: "Isabel", text: "Pueden venir manana a las 9am? Preguntarian por mi en puerta 5", time: "11:11" },
+      { dir: "outgoing", sender: "Ana", text: "Perfecto, ahi estaremos. Gracias Isabel", time: "11:12" },
+    ]
+  },
+  // ─── 26-30. NO RELEVANTES / SPAM / OTROS ──────────────────────
+  {
+    id: 26,
+    name: "Proveedor Juan — Repuestos hidraulicos",
+    phone: "+51 944 111 333",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["No relevante"],
+    tagClasses: ["tag-irrelevant"],
+    preview: "Proveedor de repuestos ofrece catalogo nuevo",
+    messages: [
+      { dir: "incoming", sender: "Juan", text: "Pedro, ya llego el catalogo nuevo de filtros hidraulicos. Quieres que te pase los precios actualizados?", time: "14:00" },
+      { dir: "outgoing", sender: "Pedro", text: "Si Juan, mandame la lista por correo", time: "14:02" },
+      { dir: "incoming", sender: "Juan", text: "Dale, te lo mando hoy. Tambien tenemos mangueras nuevas de alta presion", time: "14:03" },
+      { dir: "outgoing", sender: "Pedro", text: "Perfecto, incluye esas tambien. Gracias!", time: "14:04" },
+    ]
+  },
+  {
+    id: 27,
+    name: "Spam — Publicidad seguros",
+    phone: "+51 900 000 001",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["No relevante"],
+    tagClasses: ["tag-irrelevant"],
+    preview: "Mensaje spam de seguros vehiculares",
+    messages: [
+      { dir: "incoming", sender: "Desconocido", text: "OFERTA ESPECIAL! Seguro vehicular con 50% de descuento. Cobertura total. Llame ahora al 0800-SEGUROS", time: "10:00" },
+    ]
+  },
+  {
+    id: 28,
+    name: "Marco — Mensaje interno logistica",
+    phone: "+51 955 222 444",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["No relevante"],
+    tagClasses: ["tag-irrelevant"],
+    preview: "Coordinacion interna sobre transporte de equipos",
+    messages: [
+      { dir: "incoming", sender: "Marco", text: "Pedro, el camion con la tijera para la obra de Surco ya salio. Llega en 2 horas", time: "06:30" },
+      { dir: "outgoing", sender: "Pedro", text: "Perfecto Marco. El cliente ya sabe que llega hoy?", time: "06:32" },
+      { dir: "incoming", sender: "Marco", text: "Si, le avise ayer. Le dije que entre 8 y 9 de la manana", time: "06:33" },
+      { dir: "outgoing", sender: "Pedro", text: "Ok gracias. Avisame cuando llegue", time: "06:34" },
+    ]
+  },
+  {
+    id: 29,
+    name: "Daniel — Pregunta tecnica sin interes",
+    phone: "+51 966 333 555",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["No relevante"],
+    tagClasses: ["tag-irrelevant"],
+    preview: "Estudiante pregunta especificaciones para tesis",
+    messages: [
+      { dir: "incoming", sender: "Daniel", text: "Hola, soy estudiante de ingenieria mecanica. Estoy haciendo mi tesis sobre plataformas elevadoras", time: "17:00" },
+      { dir: "outgoing", sender: "Ana", text: "Hola Daniel! En que te podemos ayudar?", time: "17:02" },
+      { dir: "incoming", sender: "Daniel", text: "Necesitaria saber las especificaciones tecnicas de una articulada diesel de 22m. Motor, peso, capacidad, etc.", time: "17:04" },
+      { dir: "outgoing", sender: "Ana", text: "Te puedo enviar la ficha tecnica. Tienes correo?", time: "17:06" },
+      { dir: "incoming", sender: "Daniel", text: "Si, daniel.estudiante@gmail.com. Muchas gracias!", time: "17:07" },
+      { dir: "outgoing", sender: "Ana", text: "Te la envio hoy. Exitos con la tesis!", time: "17:08" },
+    ]
+  },
+  {
+    id: 30,
+    name: "Teresa — Reclamo por facturacion",
+    phone: "+51 977 444 666",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["No relevante"],
+    tagClasses: ["tag-irrelevant"],
+    preview: "Reclamo por diferencia en factura vs cotizacion",
+    messages: [
+      { dir: "incoming", sender: "Teresa", text: "Pedro, la factura que nos enviaron no coincide con la cotizacion. Hay una diferencia de S/ 500", time: "16:00" },
+      { dir: "outgoing", sender: "Pedro", text: "Teresa, dejame revisar. Que numero de factura es?", time: "16:03" },
+      { dir: "incoming", sender: "Teresa", text: "F001-45678. La cotizacion decia S/ 3,500 pero la factura dice S/ 4,000", time: "16:05" },
+      { dir: "outgoing", sender: "Pedro", text: "Ya veo el detalle. Los S/ 500 adicionales son por el transporte extra que pidieron el dia 15. Pero debimos avisarles antes, tienes razon. Lo reviso con contabilidad", time: "16:08" },
+      { dir: "incoming", sender: "Teresa", text: "Si, necesito la nota de credito para poder pagarles el monto correcto", time: "16:10" },
+    ]
+  },
+  // ─── 31-35. MAS AVERIAS ───────────────────────────────────────
+  {
+    id: 31,
+    name: "Alejandro Cruz — Construcciones Cruz",
+    phone: "+51 988 999 000",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Averia", "Urgente"],
+    tagClasses: ["tag-update", "tag-deal"],
+    preview: "Articulada diesel no arranca, humo negro al intentar",
+    messages: [
+      { dir: "incoming", sender: "Alejandro", text: "Pedro, la articulada diesel de 16m no arranca. Gira el motor pero no prende y sale humo negro", time: "07:00" },
+      { dir: "outgoing", sender: "Pedro", text: "Alejandro, puede ser problema de inyectores. Cuanto tiempo llevan intentando arrancarla?", time: "07:05" },
+      { dir: "incoming", sender: "Alejandro", text: "Desde hace 30 minutos. La dejamos enfriar y nada. Construcciones Cruz SAC, obra en Av. Colonial 2500, Callao. RUC 20345678912", time: "07:07" },
+      { dir: "incoming", sender: "Alejandro", text: "Necesitamos la maquina hoy si o si. Tenemos inspeccion de Indeci manana y estamos contra el tiempo. acruz@construccionescruz.pe", time: "07:08" },
+      { dir: "outgoing", sender: "Pedro", text: "Envio tecnico diesel ahora mismo. Si no se repara en sitio te mando reemplazo esta tarde", time: "07:10" },
+    ]
+  },
+  {
+    id: 32,
+    name: "Natalia Herrera — Mantenimiento Industrial Lima",
+    phone: "+51 933 876 543",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["Averia", "Deal"],
+    tagClasses: ["tag-update", "tag-deal"],
+    preview: "Tijera electrica avanza sola sin tocar controles",
+    messages: [
+      { dir: "incoming", sender: "Natalia", text: "Ana, tenemos un problema grave. La tijera electrica de 12m esta avanzando sola sin que nadie toque los controles", time: "10:20" },
+      { dir: "outgoing", sender: "Ana", text: "Natalia, por seguridad bajen inmediatamente y detengan la maquina con el boton de emergencia rojo", time: "10:21" },
+      { dir: "incoming", sender: "Natalia", text: "Ya la detuvimos. El operador bajo de inmediato. Puede ser el joystick de desplazamiento?", time: "10:23" },
+      { dir: "incoming", sender: "Natalia", text: "Mantenimiento Industrial Lima, Av. Argentina 3500, Lima. RUC 20456789123. Email: nherrera@manlima.pe", time: "10:24" },
+      { dir: "outgoing", sender: "Ana", text: "Probablemente es el joystick o el modulo de control. No la usen hasta que llegue el tecnico. Sale de inmediato", time: "10:25" },
+      { dir: "incoming", sender: "Natalia", text: "Ok entendido. La dejamos apagada. Necesitamos una de reemplazo urgente", time: "10:26" },
+      { dir: "outgoing", sender: "Ana", text: "Le envio una de reemplazo esta tarde. El tecnico llega en 1 hora para retirar la averiada", time: "10:28" },
+    ]
+  },
+  {
+    id: 33,
+    name: "Cesar Vargas — Vidrieria del Centro",
+    phone: "+51 944 765 432",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Averia", "Deal"],
+    tagClasses: ["tag-update", "tag-deal"],
+    preview: "Plataforma vibra mucho al llegar a altura maxima",
+    messages: [
+      { dir: "incoming", sender: "Cesar", text: "Pedro, la articulada de 20m vibra mucho cuando llegamos a los 18-20 metros. No nos sentimos seguros", time: "11:00" },
+      { dir: "outgoing", sender: "Pedro", text: "Cesar, la vibracion es al extender o cuando estan quietos arriba?", time: "11:03" },
+      { dir: "incoming", sender: "Cesar", text: "Cuando estamos quietos arriba. Sobre todo si hay un poco de viento. Vidrieria del Centro EIRL, Jr. de la Union 500, Centro de Lima", time: "11:05" },
+      { dir: "outgoing", sender: "Pedro", text: "Puede ser desgaste en los pasadores de articulacion. No la usen a mas de 15m hasta que la revisemos. Envio tecnico hoy", time: "11:07" },
+      { dir: "incoming", sender: "Cesar", text: "RUC 20567891234. Email: cvargas@vidrieriacentro.pe. Ok, solo trabajamos a menor altura mientras tanto", time: "11:08" },
+      { dir: "outgoing", sender: "Pedro", text: "Correcto. El tecnico va esta tarde. Si hay que cambiar pasadores puede tomar 1 dia", time: "11:10" },
+    ]
+  },
+  {
+    id: 34,
+    name: "Laura Paz — Supermercados Metro",
+    phone: "+51 955 654 321",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["Averia", "Urgente"],
+    tagClasses: ["tag-update", "tag-deal"],
+    preview: "Fuga de aceite de tijera mancha piso de tienda",
+    messages: [
+      { dir: "incoming", sender: "Laura", text: "Ana, la tijera de 8m esta goteando aceite en el piso de la tienda. Nos van a multar si no lo solucionamos", time: "06:00" },
+      { dir: "outgoing", sender: "Ana", text: "Laura, pongan carton debajo para proteger el piso. Cuanto aceite ha perdido?", time: "06:05" },
+      { dir: "incoming", sender: "Laura", text: "Un charco de unos 30cm. Supermercados Metro, Av. Canada 1200, La Victoria. La tienda abre a las 8am, necesitamos esto resuelto antes", time: "06:07" },
+      { dir: "incoming", sender: "Laura", text: "RUC 20678912345. Email: lpaz@metro.com.pe", time: "06:08" },
+      { dir: "outgoing", sender: "Ana", text: "Envio tecnico ahora para que llegue antes de las 7:30. Si no se arregla rapido, sacamos la maquina y traemos otra limpia", time: "06:10" },
+      { dir: "incoming", sender: "Laura", text: "Perfecto, que sea rapido por favor. El gerente de tienda esta furioso", time: "06:11" },
+    ]
+  },
+  {
+    id: 35,
+    name: "Antonio Valdivia — Electrica del Norte",
+    phone: "+51 966 543 210",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Averia", "Deal"],
+    tagClasses: ["tag-update", "tag-deal"],
+    preview: "Panel de control muestra error E-47, maquina no responde",
+    messages: [
+      { dir: "incoming", sender: "Antonio", text: "Pedro, la articulada electrica muestra un error E-47 en el panel y no responde a ningun comando", time: "13:30" },
+      { dir: "outgoing", sender: "Pedro", text: "Antonio, E-47 es error de comunicacion del controlador. Probaste apagarla completamente y volver a encender?", time: "13:33" },
+      { dir: "incoming", sender: "Antonio", text: "Si, dos veces. Se enciende pero vuelve a dar el mismo error. Electrica del Norte SAC, Av. Tupac Amaru 5000, Comas. RUC 20789123456", time: "13:35" },
+      { dir: "outgoing", sender: "Pedro", text: "Ese error necesita reprogramacion con software. Envio tecnico con laptop de diagnostico hoy", time: "13:37" },
+      { dir: "incoming", sender: "Antonio", text: "Email: avaldivia@electricadelnorte.pe. Cuanto tardaria la reparacion?", time: "13:38" },
+      { dir: "outgoing", sender: "Pedro", text: "Si es solo reprogramacion, 1-2 horas en sitio. El tecnico llega antes de las 3pm", time: "13:40" },
+    ]
+  },
+  // ─── 36-40. RESERVAS Y PRESUPUESTOS ADICIONALES ───────────────
+  {
+    id: 36,
+    name: "Veronica Luna — Museo de Arte de Lima",
+    phone: "+51 977 876 543",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "Tijera electrica 10m para restauracion de murales, 18 abril",
+    messages: [
+      { dir: "incoming", sender: "Veronica", text: "Buenos dias, soy Veronica Luna del Museo de Arte de Lima. Necesitamos una plataforma para restauracion de murales", time: "09:00" },
+      { dir: "outgoing", sender: "Ana", text: "Buenos dias Veronica! Que interesante. A que altura estan los murales?", time: "09:03" },
+      { dir: "incoming", sender: "Veronica", text: "Entre 8 y 10 metros. Necesitamos algo muy estable porque los restauradores trabajan con herramientas delicadas. Interior, piso de madera", time: "09:05" },
+      { dir: "outgoing", sender: "Ana", text: "La tijera electrica de 10m es perfecta. Muy estable, sin vibraciones, y las ruedas no danan pisos delicados", time: "09:07" },
+      { dir: "incoming", sender: "Veronica", text: "Necesitamos del 18 de abril al 10 de mayo. Paseo Colon 125, Cercado de Lima. RUC 20891234567. Email: vluna@mali.pe", time: "09:09" },
+      { dir: "outgoing", sender: "Ana", text: "Anotado Veronica. Le envio cotizacion especificando cuidados para el museo. Incluiremos proteccion extra para el piso", time: "09:11" },
+    ]
+  },
+  {
+    id: 37,
+    name: "Javier Rios — Constructora Andes",
+    phone: "+51 988 765 432",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "Articulada 43m para torre de oficinas, reserva junio",
+    messages: [
+      { dir: "incoming", sender: "Javier", text: "Hola Pedro. Javier Rios de Constructora Andes. Necesitamos la articulada mas grande que tengan", time: "14:00" },
+      { dir: "outgoing", sender: "Pedro", text: "Javier! La mas grande que tenemos es la articulada diesel de 43 metros. Para que trabajo seria?", time: "14:03" },
+      { dir: "incoming", sender: "Javier", text: "Instalacion de fachada de vidrio en torre de oficinas de 40 pisos en San Isidro. Necesitamos llegar al piso 12-14 desde afuera", time: "14:05" },
+      { dir: "outgoing", sender: "Pedro", text: "La de 43m llega perfecto. Necesitaremos espacio en la calle para estacionarla. Cuando seria?", time: "14:07" },
+      { dir: "incoming", sender: "Javier", text: "Del 1 de junio al 30 de agosto. 3 meses. Av. Rivera Navarrete 450, San Isidro. RUC 20912345678. Email: jrios@constructoraandes.pe", time: "14:09" },
+      { dir: "outgoing", sender: "Pedro", text: "3 meses con la de 43m. Es un proyecto grande. Te preparo una propuesta con precio especial por volumen", time: "14:11" },
+      { dir: "incoming", sender: "Javier", text: "Dale, necesitamos la mejor propuesta posible. Estamos comparando con otros proveedores", time: "14:12" },
+    ]
+  },
+  {
+    id: 38,
+    name: "Claudia Moreno — Hospital Rebagliati",
+    phone: "+51 933 654 321",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "2 tijeras electricas para remodelacion de pisos, abril 25",
+    messages: [
+      { dir: "incoming", sender: "Claudia", text: "Buenos dias, Claudia Moreno de EsSalud, Hospital Rebagliati. Necesitamos plataformas para remodelacion de los pisos 3 y 4", time: "08:00" },
+      { dir: "outgoing", sender: "Ana", text: "Buenos dias Claudia. Que altura de techo tienen los pisos a remodelar?", time: "08:03" },
+      { dir: "incoming", sender: "Claudia", text: "4.5 metros de piso a techo. Necesitamos 2 tijeras electricas pequenas, de 6 u 8 metros. Es interior de hospital, silencio obligatorio", time: "08:05" },
+      { dir: "outgoing", sender: "Ana", text: "Las tijeras electricas de 8m son ultra silenciosas, ideales para hospitales. Cuando las necesitan?", time: "08:07" },
+      { dir: "incoming", sender: "Claudia", text: "Del 25 de abril al 20 de mayo. Av. Salaverry 700, Jesus Maria. RUC 20123456790. Email: cmoreno@essalud.gob.pe", time: "08:09" },
+      { dir: "incoming", sender: "Claudia", text: "El trabajo sera de 10pm a 6am para no afectar pacientes. Necesitamos operador en horario nocturno", time: "08:10" },
+      { dir: "outgoing", sender: "Ana", text: "Entendido, turno nocturno. Incluyo operador certificado para horario 10pm-6am. Le envio cotizacion hoy", time: "08:12" },
+    ]
+  },
+  {
+    id: 39,
+    name: "Martin Delgado — Energias Renovables Peru",
+    phone: "+51 944 543 210",
+    comercial: "Pedro (Maxim)",
+    comercialPhone: "+51 912 345 678",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "Articulada 22m para mantenimiento de paneles solares, Nazca",
+    messages: [
+      { dir: "incoming", sender: "Martin", text: "Pedro hola. Martin Delgado de Energias Renovables Peru. Necesitamos plataforma para mantenimiento de paneles solares en nuestra planta de Nazca", time: "10:00" },
+      { dir: "outgoing", sender: "Pedro", text: "Martin! Que tipo de mantenimiento y a que altura?", time: "10:03" },
+      { dir: "incoming", sender: "Martin", text: "Limpieza e inspeccion de paneles montados en estructuras de 15-20 metros. Es desierto, mucho sol, terreno arenoso", time: "10:05" },
+      { dir: "outgoing", sender: "Pedro", text: "La articulada diesel de 22m con 4x4 funciona bien en arena. Necesitaremos coordinar proteccion solar para el operador", time: "10:07" },
+      { dir: "incoming", sender: "Martin", text: "Del 5 al 25 de mayo. Carretera Panamericana Sur km 450, Nazca. RUC 20234567891. Email: mdelgado@erperu.com.pe", time: "10:09" },
+      { dir: "outgoing", sender: "Pedro", text: "Te envio propuesta con transporte Lima-Nazca, operador con EPP para sol extremo y agua", time: "10:11" },
+      { dir: "incoming", sender: "Martin", text: "Perfecto. Si tenemos buena experiencia los contratamos para mantenimiento trimestral", time: "10:12" },
+    ]
+  },
+  {
+    id: 40,
+    name: "Beatriz Ochoa — Aeropuerto Jorge Chavez",
+    phone: "+51 955 432 109",
+    comercial: "Ana (Maxim)",
+    comercialPhone: "+51 912 345 679",
+    tags: ["Nuevo contacto", "Deal"],
+    tagClasses: ["tag-new", "tag-deal"],
+    preview: "Articulada 28m + tijera 14m para terminal nuevo, mayo",
+    messages: [
+      { dir: "incoming", sender: "Beatriz", text: "Buenos dias, soy Beatriz Ochoa de LAP (Lima Airport Partners). Necesitamos equipos para la ampliacion del terminal", time: "07:30" },
+      { dir: "outgoing", sender: "Ana", text: "Buenos dias Beatriz! Un proyecto importante. Que equipos necesitan?", time: "07:33" },
+      { dir: "incoming", sender: "Beatriz", text: "Necesitamos 1 articulada electrica de 28m para la estructura del techo y 2 tijeras electricas de 14m para instalaciones interiores", time: "07:35" },
+      { dir: "incoming", sender: "Beatriz", text: "Todo electrico obligatorio por regulacion aeroportuaria. Zona restringida, operadores necesitan antecedentes limpios", time: "07:36" },
+      { dir: "outgoing", sender: "Ana", text: "Entendido. Todos nuestros operadores tienen certificacion y antecedentes verificados. Para cuando?", time: "07:38" },
+      { dir: "incoming", sender: "Beatriz", text: "Del 1 de mayo al 31 de julio. 3 meses. RUC 20345678912. Av. Elmer Faucett s/n, Callao. Email: bochoa@lap.com.pe", time: "07:40" },
+      { dir: "incoming", sender: "Beatriz", text: "Necesitamos seguro todo riesgo y certificado de operatividad vigente de cada equipo", time: "07:41" },
+      { dir: "outgoing", sender: "Ana", text: "Incluimos toda la documentacion: seguro, ITSE, certificados de operatividad y certificados de operadores. Le envio propuesta completa esta semana", time: "07:43" },
+      { dir: "incoming", sender: "Beatriz", text: "Perfecto Ana. Es licitacion asi que necesitamos todo formal con carta fianza", time: "07:44" },
+      { dir: "outgoing", sender: "Ana", text: "Entendido. Preparamos dossier completo para licitacion", time: "07:45" },
+    ]
   }
 ];
+
 
 // ── SYSTEM PROMPT ─────────────────────────────────────────────
 const SYSTEM_PROMPT = `Eres un asistente de CRM para Maxim Domenech Peru, empresa de alquiler de maquinaria de elevacion (plataformas tijera y articuladas).
 
+FECHA ACTUAL: ${new Date().toISOString().split('T')[0]}
+
 Analiza la siguiente conversacion de WhatsApp entre un comercial y un contacto. Tu tarea es:
 
 1. CLASIFICAR si la conversacion es relevante para el CRM (comercial/ventas) o no (personal/spam/interno).
+   - Conversaciones relevantes: solicitudes de presupuesto, reservas de equipos, averias/incidencias de equipos alquilados, clientes existentes pidiendo mas equipos
+   - NO relevantes: conversaciones personales, spam, coordinacion interna entre empleados, proveedores, reclamos de facturacion, consultas academicas sin intencion de compra
 
 2. EXTRAER la siguiente informacion si esta disponible:
    - nombre_contacto, apellido_contacto
    - empresa, razon_social, ruc
    - email, telefono_adicional
-   - sector (construccion, mineria, industrial, eventos, otro)
+   - sector (construccion, mineria, industrial, energia, gobierno, salud, otro)
    - equipo_interes (tipo y altura si se menciona)
    - ubicacion_obra (ciudad, distrito, direccion)
-   - urgencia (alta/media/baja)
+   - urgencia: "alta" si es averia/emergencia o el cliente dice "urgente"/"lo antes posible"/"esta semana"; "media" si tiene fecha definida proxima (1-4 semanas); "baja" si es consulta general o fecha lejana (mas de 1 mes)
+   - tipo_solicitud: "presupuesto" | "reserva" | "averia" | "extension" | "consulta"
 
 3. DECIDIR que acciones tomar:
    - crear_contacto: true/false (true si es un contacto nuevo que no parece estar ya en el CRM. REQUIERE al menos nombre y telefono o email)
    - actualizar_contacto: true/false (true si parece un contacto existente con datos nuevos)
    - crear_empresa: true/false (SOLO true si se dispone de RUC. Si solo se menciona un nombre comercial sin RUC, poner false. Si tiene RUC pero no razon social completa con tipo societario (SAC, SA, SRL, EIRL, etc.), poner true pero incluir "razon_social" en datos_pendientes)
-   - crear_deal: true/false
-   - etapa_deal: "consulta_inicial" | "cotizacion" | "negociacion" | null
+   - crear_deal: true/false (true para CUALQUIER oportunidad activa: presupuestos concretos, reservas, extensiones, Y TAMBIEN averias/incidencias ya que representan un servicio tecnico facturable. FALSE para consultas generales sin intencion concreta de alquiler, ej: "estamos evaluando opciones", "queria saber que tienen")
+   - etapa_deal: "consulta_inicial" | "cotizacion" | "negociacion" | "servicio_tecnico" | null
    - crear_tarea: true/false (true siempre que haya un deal o una accion pendiente del comercial)
    - tarea_asunto: string con el asunto de la tarea para el comercial (ej: "Cotizar Plataforma Tijera 12m - Constructora Vida")
    - tarea_descripcion: string con detalle de lo que debe hacer el comercial. IMPORTANTE: si faltan datos clave del contacto (RUC, razon social, email), la descripcion DEBE incluir como primer paso "Solicitar datos fiscales completos (RUC, razon social, email) al contacto antes de proceder con la cotizacion." Si se tiene RUC pero falta la razon social completa, indicar: "Consultar razon social en SUNAT (https://e-consultaruc.sunat.gob.pe) con el RUC proporcionado antes de crear la empresa en el CRM."
-   - tarea_fecha_vencimiento: fecha en formato YYYY-MM-DD. Usar el dia siguiente a la conversacion SALVO que la conversacion mencione una fecha o urgencia especifica
+   - tarea_fecha_vencimiento: fecha en formato YYYY-MM-DD. Calcular basandose en la FECHA ACTUAL indicada arriba. Para averias/urgentes: usar la fecha actual. Para cotizaciones normales: dia siguiente. Para reservas con fecha: 3 dias antes de la fecha de entrega del equipo. Si la conversacion menciona una fecha especifica, usarla como referencia.
    - datos_pendientes: lista de datos importantes que faltan (ej: ["RUC", "razon_social", "email"]). Si no falta nada relevante, usar []
    - resumen: 2-3 frases describiendo la oportunidad o la conversacion
 
