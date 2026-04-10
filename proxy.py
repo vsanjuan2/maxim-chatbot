@@ -242,19 +242,32 @@ def format_messages_for_claude(messages, contact_name, contact_phone):
     """Formatea mensajes de TimelinesAI para análisis de Claude."""
     lines = []
     for m in messages:
-        ts = m.get("timestamp", 0)
-        time_str = datetime.datetime.fromtimestamp(ts).strftime("%H:%M") if ts else "??:??"
+        ts = m.get("timestamp", "")
+        time_str = "??:??"
+        if isinstance(ts, str) and ts:
+            # TimelinesAI format: "2026-04-10 00:50:27 +0200"
+            try:
+                time_str = ts.split(" ")[1][:5]  # Extract HH:MM
+            except (IndexError, TypeError):
+                time_str = "??:??"
+        elif isinstance(ts, (int, float)) and ts:
+            time_str = datetime.datetime.fromtimestamp(ts).strftime("%H:%M")
+
         direction = m.get("direction", "unknown")
-        sender = m.get("sender", "desconocido")
         text = m.get("text", "")
 
         if not text or not text.strip():
             continue
 
-        if direction == "incoming":
-            label = f"{contact_name or 'Contacto'} (tel: {contact_phone or sender})"
+        # TimelinesAI usa "received"/"sent", formato agregado usa "incoming"/"outgoing"
+        if direction in ("incoming", "received"):
+            sender_info = m.get("sender", {})
+            sender_name = sender_info.get("full_name", "") if isinstance(sender_info, dict) else str(sender_info)
+            label = f"{sender_name or contact_name or 'Contacto'} (tel: {contact_phone})"
         else:
-            label = "Comercial Maxim"
+            sender_info = m.get("sender", {})
+            sender_name = sender_info.get("full_name", "") if isinstance(sender_info, dict) else ""
+            label = f"Comercial {sender_name or 'Maxim'}"
 
         lines.append(f"[{time_str}] {label}: {text}")
 
@@ -486,12 +499,17 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
 
         # ── 1. Extraer datos del payload ──
         chat = payload.get("chat", {})
+        # TimelinesAI event "message:new" envía "message" (singular, un objeto)
+        # Convertimos a lista para unificar el procesamiento
+        single_msg = payload.get("message")
         messages = payload.get("messages", [])
+        if single_msg and not messages:
+            messages = [single_msg]
         chat_id = chat.get("chat_id")
         chat_url = chat.get("chat_url", "")
         contact_name = chat.get("full_name", "")
         is_group = chat.get("is_group", False)
-        whatsapp_account = payload.get("whatsapp_account", "")
+        whatsapp_account = payload.get("whatsapp_account", {})
 
         # ── 2. Validaciones ──
         if not chat_id or not messages:
@@ -506,36 +524,43 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({"ok": True, "skipped": "group_chat"}).encode())
             return
 
-        # ── 3. Obtener max message_id del webhook ──
-        msg_ids = [m.get("message_id", "") for m in messages]
+        # ── 3. Obtener message_uid para idempotencia ──
+        # TimelinesAI usa "message_uid" (no "message_id")
+        msg_ids = [m.get("message_uid", "") or m.get("message_id", "") for m in messages]
         max_msg_id = max(msg_ids) if msg_ids else ""
 
         # ── 4. Check idempotencia (Firestore) ──
         state = db_get_chat_state(chat_id)
-        if state and state.get("last_message_id", "") >= max_msg_id:
+        if state and max_msg_id and state.get("last_message_id", "") == max_msg_id:
             print(f"[TimelinesAI] Chat {chat_id} ya procesado (msg {max_msg_id})")
             self.send_cors(200)
             self.wfile.write(json.dumps({"ok": True, "skipped": "already_processed"}).encode())
             return
 
-        # ── 5. Extraer teléfono del contacto ──
-        contact_phone = ""
-        for m in messages:
-            if m.get("direction") == "incoming":
-                contact_phone = m.get("sender", "")
-                break
-        if not contact_phone:
-            # Si no hay incoming, intentar del primer mensaje
-            contact_phone = messages[0].get("recipient", "") or messages[0].get("sender", "")
+        # ── 5. Extraer teléfonos del contacto y comercial ──
+        # TimelinesAI "message:new" usa direction "received"/"sent"
+        # y sender/recipient son objetos {full_name, phone}
+        contact_phone = chat.get("phone", "")
+        comercial_phone = ""
+        comercial_name = ""
+        wa_account = payload.get("whatsapp_account", {})
+        if isinstance(wa_account, dict):
+            comercial_phone = wa_account.get("phone", "")
+            comercial_name = wa_account.get("full_name", "")
+        elif isinstance(wa_account, str):
+            comercial_phone = wa_account
 
-        # Teléfono del comercial (la cuenta de WhatsApp)
-        comercial_phone = whatsapp_account
-        comercial_name = ""  # TimelinesAI no envía el nombre del comercial en el webhook
-        # Determinar quién es el comercial por el sender de outgoing
+        # Si el mensaje es "received", el sender es el contacto
         for m in messages:
-            if m.get("direction") == "outgoing":
-                comercial_phone = m.get("sender", whatsapp_account)
-                break
+            direction = m.get("direction", "")
+            sender = m.get("sender", {})
+            recipient = m.get("recipient", {})
+            if direction == "received" and isinstance(sender, dict):
+                contact_phone = sender.get("phone", contact_phone)
+                contact_name = sender.get("full_name", contact_name) or contact_name
+            elif direction == "sent" and isinstance(recipient, dict):
+                contact_phone = recipient.get("phone", contact_phone)
+                contact_name = recipient.get("full_name", contact_name) or contact_name
 
         # ── 6. Formatear conversación y llamar a Claude ──
         conv_text = format_messages_for_claude(messages, contact_name, contact_phone)
